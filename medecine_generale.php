@@ -28,7 +28,7 @@ $conn->close();
 </head>
 <body class="d-flex text-center">
 
-<div class="container" id="wrapper">
+<div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
         <h1>Medicare: Médecine Générale</h1>
         <div class="bd">
@@ -47,7 +47,7 @@ $conn->close();
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="medecine_generale.php">Médecine Générale</a></li>
                                     <li><a class="dropdown-item" href="#">Médecins Spécialistes</a></li>
-                                    <li><a class="dropdown-item" href="#">Laboratoire de biologie médicale</a></li>
+                                    <li><a class="dropdown-item" href="Laboratoire.php">Laboratoire de biologie médicale</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">

@@ -32,7 +32,6 @@ session_start();
             color: #333;
         }
 
-        /* Cadre pour les informations du laboratoire */
         .lab-info {
             border: 2px solid #007bff;
             padding: 10px;
@@ -41,9 +40,9 @@ session_start();
         }
     </style>
 </head>
-<body>
+<body >
 
-<div class="container" id="wrapper">
+<div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
         <h1 class="text-center" >Medicare: Services médicaux</h1>
         <div class="bd">
@@ -60,9 +59,9 @@ session_start();
                                     Tout Parcourir
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Médecine Générale</a></li>
+                                    <li><a class="dropdown-item" href="medecine_generale.php">Médecine Générale</a></li>
                                     <li><a class="dropdown-item" href="#">Médecins Spécialistes</a></li>
-                                    <li><a class="dropdown-item" href="#">Laboratoire de biologie médicale</a></li>
+                                    <li><a class="dropdown-item" href="Laboratoire.php">Laboratoire de biologie médicale</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -94,16 +93,20 @@ session_start();
 
 <div class="container-1">
     <h1>Laboratoire de Biologie Médicale</h1>
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <h2>Coordonnées</h2>
-            <p><strong>Salle :</strong> B123</p>
-            <p><strong>Téléphone :</strong> 01 23 45 67 89</p>
-            <p><strong>Courriel :</strong> labo@example.com</p>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h2>Coordonnées</h2>
+                <p><strong>Salle :</strong> B123</p>
+                <p><strong>Téléphone :</strong> 01 23 45 67 89</p>
+                <p><strong>Courriel :</strong> labo@example.com</p>
+            </div>
+            <div class="col-md-6 text-center"> <!-- Ajout d'une nouvelle colonne pour l'image -->
+                <img src="labo-img.png" alt="Image du labo" class="img-fluid">
+            </div>
         </div>
-    </div>
+
     <button class="btn btn-primary" data-bs-toggle="collapse" href="#services" role="button" aria-expanded="false" aria-controls="services">Nos Services</button>
-    <div class="collapse mt-3" id="services">
+<div class="collapse mt-3" id="services">
         <div class="card card-body">
             <ul>
                 <li><a href="services.php?service=covid">Dépistage covid-19</a></li>
@@ -116,13 +119,14 @@ session_start();
         </div>
     </div>
 </div>
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
+        <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
+
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </footer>
 </body>
 
-<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-    <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
-    <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
 
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-</footer>
 
 </html>
