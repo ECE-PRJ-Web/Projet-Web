@@ -31,7 +31,7 @@ $_SESSION['id']=session_id();
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#">Médecine Générale</a></li>
-                                    <li><a class="dropdown-item" href="#">Médecins Spécialistes</a></li>
+                                    <li><a class="dropdown-item" href="medecins_specialises.php">Médecins Spécialistes</a></li>
                                     <li><a class="dropdown-item" href="#">Laboratoire de biologie médicale</a></li>
                                 </ul>
                             </li>
