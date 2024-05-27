@@ -60,42 +60,52 @@ session_start();
             </nav>
         </div>
     </div>
+    <div class="container">
+        <h2>Édition des données</h2>
+        <a href="modifier_mdp.php" class="btn btn-primary mb-2">Modifier mon mot de passe</a>
 
-    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
-
-        <h2>Mon compte</h2>
-
-        <h3>Mes informations</h3>
-        <p>Nom: <?php echo $_SESSION['nom'] ?></p>
-        <p>Prénom: <?php echo $_SESSION['prenom'] ?></p>
-        <p>Email: <?php echo $_SESSION['mail'] ?></p>
-
-        <?php
-        if ($_SESSION['adresse'] && !empty($_SESSION['adresse']) !== null) {
-            $adresse = $_SESSION['adresse'];
-            echo "<p> Adresse: $adresse </p>";
-        }
-        else {
-            echo "<p> Adresse: Non renseignée </p>";
-
-        }
-
-        if ($_SESSION['CarteVitale'] && !empty($_SESSION['CarteVitale']) !== null){
-            $CarteVitale = $_SESSION['CarteVitale'];
-            echo "<p> Numéro de carte vitale: $CarteVitale </p>";
-        }
-        else {
-            echo "<p> Numéro de carte vitale: Non renseigné </p>";
-
-        }?>
-
-        <a href="edition_donnes_clients.php" class="btn btn-primary mb-2">Modifier mes informations</a>
-        <a href="deconnexion.php" class="btn btn-danger">Déconnexion</a>
-
-
-
-
-
+        <form action="traitement_edition_donnees_clients.php" method="post">
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom</label>
+                <?php if (isset($_SESSION['nom'])) {
+                    echo '<input type="text" class="form-control" id="nom" name="nom" value="' . $_SESSION['nom'] . '" required>';
+                } else {
+                    echo '<input type="text" class="form-control" id="nom" name="nom" value="" required>';
+                }?>
+            </div>
+            <div class="mb-3">
+                <label for="prenom" class="form-label">Prénom</label>
+                <?php if (isset($_SESSION['prenom'])) {
+                    echo '<input type="text" class="form-control" id="prenom" name="prenom" value="' . $_SESSION['prenom'] . '" required>';
+                } else {
+                    echo '<input type="text" class="form-control" id="prenom" name="prenom" value="" required>';
+                }?>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Adresse email</label>
+                <?php if (isset($_SESSION['mail'])) {
+                    echo '<input type="email" class="form-control" id="email" name="email" value="' . $_SESSION['mail'] . '" required>';
+                } else {
+                    echo '<input type="email" class="form-control" id="email" name="email" value="" required>';
+                }?>
+            </div>
+            <div class="mb-3">
+                <label for="adresse" class="form-label">Adresse</label>
+                <?php if (isset($_SESSION['adresse'])) {
+                    echo '<input type="text" class="form-control" id="adresse" name="adresse" value="' . $_SESSION['adresse'] . '">';
+                } else {
+                    echo '<input type="text" class="form-control" id="adresse" name="adresse" value="">';
+                }?>
+            </div>
+            <div class="mb-3">
+                <label for="CarteVitale" class="form-label">Numéro de Carte Vitale</label>
+                <?php if (isset($_SESSION['CarteVitale'])) {
+                    echo '<input type="text" class="form-control" id="CarteVitale" name="CarteVitale" value="' . $_SESSION['CarteVitale'] . '">';
+                } else {
+                    echo '<input type="text" class="form-control" id="CarteVitale" name="CarteVitale" value="">';
+                }?>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Valider</button>
 
     </div>
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">

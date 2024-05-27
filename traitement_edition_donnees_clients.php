@@ -1,5 +1,32 @@
 <?php
 session_start();
+
+$_SESSION['id']=session_id();
+
+$mail = $_POST['email'];
+$nom = $_POST['nom'];
+$prenom = $_POST['prenom'];
+$adresse = $_POST['adresse'];
+$CarteVitale = $_POST['CarteVitale'];
+
+$bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+
+$requete = $bdd->prepare("UPDATE clients SET nom = :nom, prenom = :prenom, email = :mail, address = :adresse, CarteVitale = :CarteVitale WHERE id = :id");
+$requete->bindParam(':nom', $nom);
+$requete->bindParam(':prenom', $prenom);
+$requete->bindParam(':mail', $mail);
+$requete->bindParam(':adresse', $adresse);
+$requete->bindParam(':CarteVitale', $CarteVitale);
+$requete->bindParam(':id', $_SESSION['id_client']);
+
+$reussi = $requete->execute();
+
+$_SESSION['nom'] = $nom;
+$_SESSION['prenom'] = $prenom;
+$_SESSION['mail'] = $mail;
+$_SESSION['adresse'] = $adresse;
+$_SESSION['CarteVitale'] = $CarteVitale;
+
 ?>
 <html lang="fr">
 <head>
@@ -63,41 +90,23 @@ session_start();
 
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
 
-        <h2>Mon compte</h2>
-
-        <h3>Mes informations</h3>
-        <p>Nom: <?php echo $_SESSION['nom'] ?></p>
-        <p>Prénom: <?php echo $_SESSION['prenom'] ?></p>
-        <p>Email: <?php echo $_SESSION['mail'] ?></p>
-
         <?php
-        if ($_SESSION['adresse'] && !empty($_SESSION['adresse']) !== null) {
-            $adresse = $_SESSION['adresse'];
-            echo "<p> Adresse: $adresse </p>";
+
+        if ($reussi) {
+            echo "<h2>Mise à jour réussie</h2>";
+            echo "<p>Vos données ont bien été mises à jour !</p>";
+            echo "<a href='index.php' class='btn btn-success mb-2'>Retour à l'accueil</a>";
+            echo "<a href='compte.php' class='btn btn-primary'>Retour à mon compte</a>";
         }
         else {
-            echo "<p> Adresse: Non renseignée </p>";
-
+            echo "<h2>Echec</h2>";
+            echo "<p>Echec de la mise à jour, vérifier vos informations</p>";
+            echo "<a href='edition_donnes_clients.php' class='btn btn-danger'>Réessayer</a>";
         }
 
-        if ($_SESSION['CarteVitale'] && !empty($_SESSION['CarteVitale']) !== null){
-            $CarteVitale = $_SESSION['CarteVitale'];
-            echo "<p> Numéro de carte vitale: $CarteVitale </p>";
-        }
-        else {
-            echo "<p> Numéro de carte vitale: Non renseigné </p>";
-
-        }?>
-
-        <a href="edition_donnes_clients.php" class="btn btn-primary mb-2">Modifier mes informations</a>
-        <a href="deconnexion.php" class="btn btn-danger">Déconnexion</a>
-
-
-
-
-
-
+        ?>
     </div>
+
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
         <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>

@@ -60,42 +60,24 @@ session_start();
             </nav>
         </div>
     </div>
+    <div class="container">
 
-    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
-
-        <h2>Mon compte</h2>
-
-        <h3>Mes informations</h3>
-        <p>Nom: <?php echo $_SESSION['nom'] ?></p>
-        <p>Prénom: <?php echo $_SESSION['prenom'] ?></p>
-        <p>Email: <?php echo $_SESSION['mail'] ?></p>
-
-        <?php
-        if ($_SESSION['adresse'] && !empty($_SESSION['adresse']) !== null) {
-            $adresse = $_SESSION['adresse'];
-            echo "<p> Adresse: $adresse </p>";
-        }
-        else {
-            echo "<p> Adresse: Non renseignée </p>";
-
-        }
-
-        if ($_SESSION['CarteVitale'] && !empty($_SESSION['CarteVitale']) !== null){
-            $CarteVitale = $_SESSION['CarteVitale'];
-            echo "<p> Numéro de carte vitale: $CarteVitale </p>";
-        }
-        else {
-            echo "<p> Numéro de carte vitale: Non renseigné </p>";
-
-        }?>
-
-        <a href="edition_donnes_clients.php" class="btn btn-primary mb-2">Modifier mes informations</a>
-        <a href="deconnexion.php" class="btn btn-danger">Déconnexion</a>
-
-
-
-
-
+        <h2>Modifier votre mot de passe</h2>
+        <form action="traitement_modifier_mdp.php" method="post">
+            <div class="mb-3">
+                <label for="mdp" class="form-label">Mot de passe actuel</label>
+                <input type="password" class="form-control" id="mdp" name="mdp">
+            </div>
+            <div class="mb-3">
+                <label for="new_mdp" class="form-label">Nouveau mot de passe</label>
+                <input type="password" class="form-control" id="new_mdp" name="new_mdp">
+            </div>
+            <div class="mb-3">
+                <label for="new_mdp_confirm" class="form-label">Confirmer le nouveau mot de passe</label>
+                <input type="password" class="form-control" id="new_mdp_confirm" name="new_mdp_confirm">
+            </div>
+            <button type="submit" class="btn btn-primary">Modifier</button>
+        </form>
 
     </div>
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">

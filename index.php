@@ -1,6 +1,14 @@
 <?php
 session_start();
 $_SESSION['id']=session_id();
+
+if (isset($_SESSION['connected']) && $_SESSION['connected'] == true) {
+
+}
+
+else {
+    header('Location: connexion.php');
+}
 ?>
 <html lang="fr">
 <head>
