@@ -13,7 +13,8 @@ CREATE TABLE clients (
     email VARCHAR(255) NOT NULL ,
     address VARCHAR(255),
     CarteVitale INT,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    type_compte INT NOT NULL DEFAULT 0
 );
 
 DROP TABLE IF EXISTS professionnels;

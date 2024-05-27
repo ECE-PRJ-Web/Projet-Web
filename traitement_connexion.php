@@ -16,13 +16,13 @@ if ($requete->rowCount() != 0) {
     $client = $requete->fetch();
     if ($client['password'] == $password) {
         $_SESSION['connected'] = true;
-        $_SESSION['type'] = "client";
         $_SESSION['id_client'] = $client['id'];
         $_SESSION['nom'] = $client['nom'];
         $_SESSION['prenom'] = $client['prenom'];
         $_SESSION['mail'] = $client['email'];
         $_SESSION['adresse'] = $client['address'];
         $_SESSION['CarteVitale'] = $client['CarteVitale'];
+        $_SESSION['type_compte'] = $client['type_compte'];
         $reussi = true;
     }
 }
