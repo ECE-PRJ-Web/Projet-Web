@@ -41,15 +41,18 @@ CREATE TABLE medecins (
                           cv TEXT
 );
 
+DROP TABLE IF EXISTS disponibilites;
+
 CREATE TABLE disponibilites (
                                 id INT AUTO_INCREMENT PRIMARY KEY,
                                 medecin_id INT,
-                                jour VARCHAR(10),
+                                jour_semaine ENUM('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'),
                                 heure_debut TIME,
                                 heure_fin TIME,
                                 disponible BOOLEAN,
                                 FOREIGN KEY (medecin_id) REFERENCES medecins(id)
 );
+
 
 
 

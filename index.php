@@ -41,7 +41,7 @@ else {
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="medecine_generale.php">Médecine Générale</a></li>
                                     <li><a class="dropdown-item" href="#">Médecins Spécialistes</a></li>
-                                    <li><a class="dropdown-item" href="#">Laboratoire de biologie médicale</a></li>
+                                    <li><a class="dropdown-item" href="Laboratoire.php">Laboratoire de biologie médicale</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">

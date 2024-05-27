@@ -32,31 +32,32 @@ if ($result->num_rows > 0) {
 $sql_dispo = "SELECT * FROM disponibilites WHERE medecin_id = $id AND disponible = 1";
 $result_dispo = $conn->query($sql_dispo);
 
-// Fonction pour insérer un rendez-vous
-function insererRdv($date, $heure, $medecin_id, $conn) {
-    $sql_insert = "INSERT INTO rendez_vous (date_rdv, heure_rdv, medecin_id) VALUES ('$date', '$heure', $medecin_id)";
-    if ($conn->query($sql_insert) === TRUE) {
-        return true;
-    } else {
-        return false;
-    }
-}
+// Créer un tableau associatif pour stocker les disponibilités par jour
+$disponibilites = array(
+    'lundi' => array(),
+    'mardi' => array(),
+    'mercredi' => array(),
+    'jeudi' => array(),
+    'vendredi' => array(),
+    'samedi' => array(),
+    'dimanche' => array()
+);
 
-// Traitement du formulaire de prise de rendez-vous
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-    $date_rdv = $_POST['date_rdv'];
-    $heure_rdv = $_POST['heure_rdv'];
-
-    // Insérer le rendez-vous dans la base de données
-    if (insererRdv($date_rdv, $heure_rdv, $id, $conn)) {
-        echo '<div class="alert alert-success" role="alert">Rendez-vous enregistré avec succès !</div>';
-    } else {
-        echo '<div class="alert alert-danger" role="alert">Erreur lors de l\'enregistrement du rendez-vous.</div>';
+// Remplir le tableau associatif avec les disponibilités
+if ($result_dispo->num_rows > 0) {
+    while ($dispo = $result_dispo->fetch_assoc()) {
+        $jour = $dispo['jour_semaine'];
+        $disponibilites[$jour][] = array(
+            'id' => $dispo['id'],
+            'heure_debut' => $dispo['heure_debut'],
+            'heure_fin' => $dispo['heure_fin']
+        );
     }
 }
 
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -68,8 +69,9 @@ $conn->close();
 <body class="d-flex text-center">
 
 <div class="container" id="wrapper">
+    <!-- Header et navigation -->
     <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
-        <h1>Medicare: <?php echo htmlspecialchars($medecin['nom'] . ' ' . $medecin['prenom']); ?></h1>
+        <h1>Medicare: Détails du médecin</h1>
         <div class="bd">
             <nav class="navbar navbar-expand-lg sticky-top mb-2">
                 <div class="container-fluid">
@@ -132,40 +134,38 @@ $conn->close();
         </div>
         <br>
         <h3>Disponibilités</h3>
-        <ul class="list-group">
-            <?php if ($result_dispo->num_rows > 0): ?>
-                <?php while($dispo = $result_dispo->fetch_assoc()): ?>
-                    <li class="list-group-item">
-                        <?php echo htmlspecialchars($dispo['jour'] . ' - ' . $dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?>
-                    </li>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <li class="list-group-item">Aucune disponibilité trouvée.</li>
-            <?php endif; ?>
-        </ul>
-        <br>
-        <h3>Prendre un rendez-vous</h3>
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?id=' . $id; ?>">
-            <div class="mb-3">
-                <label for="date_rdv" class="form-label">Date du rendez-vous</label>
-                <input type="date" class="form-control" id="date_rdv" name="date_rdv" required>
-            </div>
-            <div class="mb-3">
-                <label for="heure_rdv" class="form-label">Heure du rendez-vous</label>
-                <input type="time" class="form-control" id="heure_rdv" name="heure_rdv" required>
-            </div>
-            <button type="submit" name="submit" class="btn btn-primary">Prendre rendez-vous</button>
-        </form>
+        <div class="row">
+            <?php foreach ($disponibilites as $jour => $dispos): ?>
+                <div class="col-md-4">
+                    <h5><?php echo ucfirst($jour); ?></h5>
+                    <ul class="list-group">
+                        <?php if (!empty($dispos)): ?>
+                            <?php foreach ($dispos as $dispo): ?>
+                                <li class="list-group-item">
+                                    <form method="post" action="confirmation.php">
+                                        <input type="hidden" name="dispo_id" value="<?php echo htmlspecialchars($dispo['id']); ?>">
+                                        <button type="submit" name="submit" class="btn btn-outline-primary">
+                                            <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?>
+                                        </button>
+                                    </form>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li class="list-group-item">Aucune disponibilité ce jour.</li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            <?php endforeach; ?>
+        </div>
         <br>
         <a href="medecine_generale.php" class="btn btn-secondary">Retourner à la liste des médecins généralistes</a>
     </div>
 
+    <!-- Footer -->
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
-        <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'O
-        <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
         <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d'Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </footer>
 </div>
 </body>
