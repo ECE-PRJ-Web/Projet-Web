@@ -1,6 +1,7 @@
 <?php
 session_start();
 ?>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -61,40 +62,20 @@ session_start();
         </div>
     </div>
 
-    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
-
-        <h2>Mon compte</h2>
-
-        <h3>Mes informations</h3>
-        <p>Nom: <?php echo $_SESSION['nom'] ?></p>
-        <p>Prénom: <?php echo $_SESSION['prenom'] ?></p>
-        <p>Email: <?php echo $_SESSION['mail'] ?></p>
-
-        <?php
-        if ($_SESSION['adresse'] && !empty($_SESSION['adresse']) !== null) {
-            $adresse = $_SESSION['adresse'];
-            echo "<p> Adresse: $adresse </p>";
-        }
-        else {
-            echo "<p> Adresse: Non renseignée </p>";
-
-        }
-
-        if ($_SESSION['CarteVitale'] && !empty($_SESSION['CarteVitale']) !== null){
-            $CarteVitale = $_SESSION['CarteVitale'];
-            echo "<p> Numéro de carte vitale: $CarteVitale </p>";
-        }
-        else {
-            echo "<p> Numéro de carte vitale: Non renseigné </p>";
-
-        }?>
-
-        <a href="edition_donnes_clients.php" class="btn btn-primary mb-2">Modifier mes informations</a>
-        <a href="deconnexion.php" class="btn btn-danger">Déconnexion</a>
 
 
+    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column ">
 
+        <h2>Bulletin santé de la semaine</h2>
+        <br>
 
+        <div id="carrousel" class="lead">
+            <ul style="list-style: none">
+                <li><a href="https://www.legorafi.fr/2023/12/19/penurie-de-medicaments-le-gouvernement-recommande-de-mettre-une-gousse-dail-sous-son-oreiller/"><h5 class="">Pénurie de médicaments – Le gouvernement recommande <br> de mettre une gousse d’ail sous son oreiller</h5><img class="img-fluid" src="medicaments.png" width="700" height="400.jpg"/></a></li>
+                <li><a href="https://www.legorafi.fr/2023/06/19/par-un-procede-revolutionnaire-des-scientifiques-reussissent-a-transformer-la-contrex-en-eau/"><h5 class="">Par un procédé révolutionnaire,<br>des scientifiques réussissent à transformer la Contrex en eau</h5> <img class="img-fluid" src="https://www.legorafi.fr/wp-content/uploads/2023/06/labo-2048x1152.jpg" width="700" height="400.jpg"></a></li>
+                <li><a href="https://www.legorafi.fr/2024/05/24/une-etude-revele-que-les-gauchers-sont-plus-habiles-de-leur-main-gauche/"><h5 class="">Une étude révèle que les gauchers <br> sont plus habiles de leur main gauche</h5> <img class="img-fluid" src="https://www.legorafi.fr/wp-content/uploads/2024/05/iStock-1253877737-2048x1365.jpg" width="700" height="400.jpg"></a></li>
+            </ul>
+        </div>
 
 
     </div>
