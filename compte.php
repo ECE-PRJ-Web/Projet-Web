@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -50,6 +55,20 @@
         </div>
     </div>
 
+    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
+
+        <h2>Mon compte</h2>
+
+        <h3>Mes informations</h3>
+        <p>Nom: <?php echo $_SESSION['nom'] ?></p>
+        <p>Prénom: <?php echo $_SESSION['prenom'] ?></p>
+        <p>Email: <?php echo $_SESSION['mail'] ?></p>
+
+        <?php
+        if (isset($_SESSION['adresse'])) {
+            $adresse = $_SESSION['adresse'];
+            echo '<p> Adresse: $adresse </p>';
+        } ?>
 
 
 

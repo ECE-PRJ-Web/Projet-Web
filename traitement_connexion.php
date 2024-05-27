@@ -94,7 +94,7 @@ else {
         <?php
 
         if ($reussi) {
-            echo "<h2>Inscription réussie</h2>";
+            echo "<h2>Connexion réussie</h2>";
             $prenom = $_SESSION['prenom'];
             $nom = $_SESSION['nom'];
             echo "<p>Bienvenue $prenom $nom, vous êtes maintenant connecté sur Medicare</p>";
