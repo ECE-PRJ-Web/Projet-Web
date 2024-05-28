@@ -24,8 +24,8 @@ session_start();
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
-            color: #007bff;
+        h1, h2,h5 {
+            color: black;
         }
 
         p {
@@ -100,7 +100,7 @@ session_start();
                 <p><strong>Téléphone :</strong> 01 23 45 67 89</p>
                 <p><strong>Courriel :</strong> labo@example.com</p>
             </div>
-            <div class="col-md-6 text-center"> <!-- Ajout d'une nouvelle colonne pour l'image -->
+            <div class="col-md-6 text-center">
                 <img src="labo-img.png" alt="Image du labo" class="img-fluid">
             </div>
         </div>
@@ -119,11 +119,25 @@ session_start();
         </div>
     </div>
 </div>
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
-        <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
-
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <footer class="d-flex flex-wrap justify-content-between align-items-start py-3 my-4 border-top">
+        <div class="col-md-6 text-center">
+            <h5>Nous retrouver</h5>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <p class="mt-2">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
+        </div>
+        <div class="col-md-6 text-center">
+            <h5>Nous contacter</h5>
+            <p>Téléphone : 01 23 45 67 89</p>
+            <p>Courriel : labo@example.com</p>
+            <div class="social-icons">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-twitter"></i></a>
+            </div>
+        </div>
+        <div class="col-12 text-center mt-4">
+            <p class="mb-0 text-body-secondary">© 2024 SA Medicare</p>
+        </div>
     </footer>
 </body>
 
