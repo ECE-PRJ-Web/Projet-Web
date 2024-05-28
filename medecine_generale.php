@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Requête pour obtenir les médecins généralistes
-$sql = "SELECT * FROM medecins";
+$sql = "SELECT * FROM professionnels";
 $result = $conn->query($sql);
 
 $conn->close();
