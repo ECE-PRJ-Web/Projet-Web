@@ -1,6 +1,25 @@
 <?php
 session_start();
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "medicare";
+
+// Connexion à la base de données
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Requête pour obtenir les services
+$sql = "SELECT * FROM services_laboratoire";
+$result = $conn->query($sql);
+
+// Fermer la connexion après avoir récupéré les données
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,10 +28,11 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding-top: 20px;
+
+        .head{
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .container-1 {
@@ -43,7 +63,7 @@ session_start();
 <body >
 
 <div class="container-fluid" id="wrapper">
-    <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
+    <div class="bg-info bg-gradient bg-success head" style="--bs-bg-opacity: .3" id="header">
         <h1 class="text-center" >Medicare: Services médicaux</h1>
         <div class="bd">
             <nav class="navbar navbar-expand-lg sticky-top mb-2">
@@ -109,12 +129,16 @@ session_start();
 <div class="collapse mt-3" id="services">
         <div class="card card-body">
             <ul>
-                <li><a href="services.php?service=covid">Dépistage covid-19</a></li>
-                <li><a href="services.php?service=prevention">Biologie préventive</a></li>
-                <li><a href="services.php?service=femme-enceinte">Biologie de la femme enceinte</a></li>
-                <li><a href="services.php?service=routine">Biologie de routine</a></li>
-                <li><a href="services.php?service=cancerologie">Cancérologie</a></li>
-                <li><a href="services.php?service=gynécologie">Gynécologie</a></li>
+                <?php
+                // Boucle pour afficher les services
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo '<li><a href="services.php?service_id=' . $row["service_id"] . '">' . $row["title"] . '</a></li>';
+                    }
+                } else {
+                    echo "0 results";
+                }
+                ?>
             </ul>
         </div>
     </div>
@@ -128,7 +152,7 @@ session_start();
         <div class="col-md-6 text-center">
             <h5>Nous contacter</h5>
             <p>Téléphone : 01 23 45 67 89</p>
-            <p>Courriel : labo@example.com</p>
+            <p>Courriel : <a href="mailto:labo@example.com">labo@example.com</a></p>
             <div class="social-icons">
                 <a href="#"><i class="bi bi-facebook"></i></a>
                 <a href="#"><i class="bi bi-instagram"></i></a>
@@ -140,7 +164,5 @@ session_start();
         </div>
     </footer>
 </body>
-
-
 
 </html>
