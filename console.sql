@@ -102,3 +102,15 @@ CREATE TABLE transactions (
                               statut ENUM('validé', 'refusé') NOT NULL,
                               FOREIGN KEY (client_id) REFERENCES clients(id)
 );
+
+DROP TABLE IF EXISTS messages;
+
+CREATE TABLE messages (
+                        message_id INT AUTO_INCREMENT PRIMARY KEY,
+                        expediteur_id INT,
+                        destinataire_id INT,
+                        date_heure DATETIME,
+                        message TEXT,
+                        FOREIGN KEY (expediteur_id) REFERENCES clients(id),
+                        FOREIGN KEY (destinataire_id) REFERENCES clients(id)
+);

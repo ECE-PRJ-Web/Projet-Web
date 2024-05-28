@@ -48,3 +48,5 @@ $(document).ready(function(){
         }, 4000); // on définit l'intervalle à 4000 millisecondes (4s)
     } slideImg(); // enfin, on lance la fonction une première fois
 });
+
+//If user submits the form
