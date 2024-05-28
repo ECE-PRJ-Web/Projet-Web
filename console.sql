@@ -31,16 +31,7 @@ CREATE TABLE professionnels (
     CV VARCHAR(255)
 );
 
-CREATE TABLE medecins (
-                          id INT AUTO_INCREMENT PRIMARY KEY,
-                          nom VARCHAR(50) NOT NULL,
-                          prenom VARCHAR(50) NOT NULL,
-                          photo VARCHAR(255),
-                          bureau VARCHAR(100),
-                          telephone VARCHAR(20),
-                          courriel VARCHAR(100),
-                          cv TEXT
-);
+
 
 DROP TABLE IF EXISTS disponibilites;
 
@@ -51,7 +42,7 @@ CREATE TABLE disponibilites (
                                 heure_debut TIME,
                                 heure_fin TIME,
                                 disponible BOOLEAN,
-                                FOREIGN KEY (medecin_id) REFERENCES medecins(id)
+                                FOREIGN KEY (medecin_id) REFERENCES professionnels(id)
 );
 
 
@@ -66,7 +57,7 @@ CREATE TABLE rendezvous (
                             heure TIME,
                             statut ENUM('programmé', 'annulé', 'terminé') NOT NULL,
                             FOREIGN KEY (client_id) REFERENCES clients(id),
-                            FOREIGN KEY (medecin_id) REFERENCES medecins(id)
+                            FOREIGN KEY (medecin_id) REFERENCES professionnels(id)
 );
 
 -- Table des services du laboratoire

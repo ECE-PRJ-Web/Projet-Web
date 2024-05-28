@@ -6,9 +6,9 @@ $username = "root";
 $password = "";
 $dbname = "medicare";
 
-// Vérifier si l'ID du médecin est passé en paramètre
+// Vérifier si l'ID du professionnel est passé en paramètre
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die("ID du médecin non spécifié");
+    die("ID du professionnel non spécifié");
 }
 
 // Connexion à la base de données
@@ -17,19 +17,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Récupérer les informations sur le médecin
+// Récupérer les informations sur le professionnel
 $id = $_GET['id'];
-$sql = "SELECT * FROM medecins WHERE id = $id";
+$sql = "SELECT * FROM professionnels WHERE id = $id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    $medecin = $result->fetch_assoc();
+    $professionnel = $result->fetch_assoc();
 } else {
-    die("Médecin non trouvé");
+    die("Professionnel non trouvé");
 }
 
-// Récupérer les disponibilités du médecin
-$sql_dispo = "SELECT * FROM disponibilites WHERE medecin_id = $id AND disponible = 1";
+// Récupérer les disponibilités du professionnel
+$sql_dispo = "SELECT * FROM disponibilites WHERE medecin_id = $id";
 $result_dispo = $conn->query($sql_dispo);
 
 // Créer un tableau associatif pour stocker les disponibilités par jour
@@ -50,7 +50,8 @@ if ($result_dispo->num_rows > 0) {
         $disponibilites[$jour][] = array(
             'id' => $dispo['id'],
             'heure_debut' => $dispo['heure_debut'],
-            'heure_fin' => $dispo['heure_fin']
+            'heure_fin' => $dispo['heure_fin'],
+            'disponible' => $dispo['disponible']
         );
     }
 }
@@ -62,7 +63,7 @@ $conn->close();
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Medicare: <?php echo htmlspecialchars($medecin['nom'] . ' ' . $medecin['prenom']); ?></title>
+    <title>Medicare: <?php echo htmlspecialchars($professionnel['nom'] . ' ' . $professionnel['prenom']); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -71,7 +72,7 @@ $conn->close();
 <div class="container" id="wrapper">
     <!-- Header et navigation -->
     <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
-        <h1>Medicare: Détails du médecin</h1>
+        <h1>Medicare: Détails du professionnel</h1>
         <div class="bd">
             <nav class="navbar navbar-expand-lg sticky-top mb-2">
                 <div class="container-fluid">
@@ -118,17 +119,16 @@ $conn->close();
     </div>
 
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column">
-        <h2><?php echo htmlspecialchars($medecin['nom'] . ' ' . $medecin['prenom']); ?></h2>
+        <h2><?php echo htmlspecialchars($professionnel['nom'] . ' ' . $professionnel['prenom']); ?></h2>
         <br>
         <div class="lead">
             <div class="d-flex align-items-center">
-                <img src="<?php echo htmlspecialchars($medecin['photo']); ?>" alt="Photo de <?php echo htmlspecialchars($medecin['nom']); ?>" class="img-thumbnail" width="100" height="100">
+                <img src="<?php echo htmlspecialchars($professionnel['path_photo']); ?>" alt="Photo de <?php echo htmlspecialchars($professionnel['nom']); ?>" class="img-thumbnail" width="100" height="100">
                 <div class="ms-3">
-                    <p>Bureau: <?php echo htmlspecialchars($medecin['bureau']); ?></p>
-                    <p>Téléphone: <?php echo htmlspecialchars($medecin['telephone']); ?></p>
-                    <p>Courriel: <?php echo htmlspecialchars($medecin['courriel']); ?></p>
+                    <p>Spécialité: <?php echo htmlspecialchars($professionnel['specialite']); ?></p>
+                    <p>Email: <?php echo htmlspecialchars($professionnel['email']); ?></p>
                     <a href="#" class="btn btn-primary">Envoyer un message</a>
-                    <a href="tel:<?php echo htmlspecialchars($medecin['telephone']); ?>" class="btn btn-success ms-2">Appeler</a>
+                    <a href="tel:<?php echo htmlspecialchars($professionnel['path_video']); ?>" class="btn btn-success ms-2">Appeler</a>
                 </div>
             </div>
         </div>
@@ -142,12 +142,18 @@ $conn->close();
                         <?php if (!empty($dispos)): ?>
                             <?php foreach ($dispos as $dispo): ?>
                                 <li class="list-group-item">
-                                    <form method="post" action="confirmation.php">
-                                        <input type="hidden" name="dispo_id" value="<?php echo htmlspecialchars($dispo['id']); ?>">
-                                        <button type="submit" name="submit" class="btn btn-outline-primary">
-                                            <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?>
+                                    <?php if ($dispo['disponible']): ?>
+                                        <form method="post" action="confirmation.php">
+                                            <input type="hidden" name="dispo_id" value="<?php echo htmlspecialchars($dispo['id']); ?>">
+                                            <button type="submit" name="submit" class="btn btn-outline-primary">
+                                                <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?>
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <button class="btn btn-outline-secondary" disabled>
+                                            <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?> (Indisponible)
                                         </button>
-                                    </form>
+                                    <?php endif; ?>
                                 </li>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -158,7 +164,7 @@ $conn->close();
             <?php endforeach; ?>
         </div>
         <br>
-        <a href="medecine_generale.php" class="btn btn-secondary">Retourner à la liste des médecins généralistes</a>
+        <a href="medecine_generale.php" class="btn btn-secondary">Retourner à la liste des professionnels</a>
     </div>
 
     <!-- Footer -->
