@@ -1,6 +1,31 @@
 <?php
 session_start();
+
+$id_medecin = $_GET['id'];
+
+$bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+
+$requete = $bdd->prepare("SELECT * FROM professionnels WHERE id = :id");
+$requete->bindParam(':id', $id_medecin);
+$result = $requete->execute();
+
+if ($result) {
+    $row = $requete->fetch();
+    $nom = $row['nom'];
+    $prenom = $row['prenom'];
+    $specialite = $row['specialite'];
+    $email = $row['email'];
+    $path_photo = $row['path_photo'];
+    $path_video = $row['path_video'];
+
+} else {
+    echo "Erreur de récupération";
+}
+
+
+
 ?>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -63,42 +88,23 @@ session_start();
     </div>
 
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
-        <h2>Liste Médecins</h2>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Spécialité</th>
-                <th scope="col">Email</th>
-                <th scope="col">Photo</th>
-                <th scope="col">Vidéo</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
 
-            <?php
-            $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
-            $requete = $bdd->prepare("SELECT * FROM professionnels");
-            $result = $requete->execute();
-            if ($requete->rowCount() != 0) {
-                while ($row = $requete->fetch()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['id'] . "</td>";
-                    echo "<td>" . $row['nom'] . "</td>";
-                    echo "<td>" . $row['prenom'] . "</td>";
-                    echo "<td>" . $row['specialite'] . "</td>";
-                    echo "<td>" . $row['email'] . "</td>";
-                    $img = $row['path_photo'];
-                    echo "<td><img src='$img' width='100' height='100' alt='...'></td>";
-                    echo "<td><video width='320' height='180' controls><source src='videos/" . $row['path_video'] . "' type='video/mp4'></video></td>";
-                    echo "<td><a href='modifier_medecin.php?id=" . $row['id'] . "'>Modifier</a> | <a href='supprimer_medecin.php?id=" . $row['id'] . "'>Supprimer</a></td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "0 results";
-            }
-            ?>
-            </tbody>
+        <form action="traitement_modifier_medecin.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?php echo $id_medecin; ?>">
+            <div class="mb-3">
+                <label for="specialite" class="form-label">Spécialité</label>
+                <input type="text" class="form-control" id="specialite" name="specialite" value="<?php echo $specialite;?>">
+            </div>
+            <div class="mb-3">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" class="form-control" id="photo" name="photo">
+            </div>
+            <div class="mb-3">
+                <label for="video" class="form-label">Vidéo</label>
+                <input type="file" class="form-control" id="video" name="video">
+            </div>
+            <button type="submit" class="btn btn-primary">Modifier</button>
+        </form>
+    </div>
+</div>
+
