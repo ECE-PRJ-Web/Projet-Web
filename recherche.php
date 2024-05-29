@@ -1,6 +1,7 @@
 <?php
 session_start();
 $_SESSION['id']=session_id();
+$recherche = $_GET['recherche'];
 ?>
 <html lang="fr">
 <head>
@@ -62,7 +63,7 @@ $_SESSION['id']=session_id();
                         }
                         ?>
                         <form class="d-flex navbar-nav mb-lg-0" role="search" action="recherche.php">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="recherche">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success " type="submit">Search</button>
                         </form>
                     </div>
@@ -72,56 +73,50 @@ $_SESSION['id']=session_id();
         </div>
     </div>
 
-
-
-    <div class="container">
-        <h2 class="mt-3">Bulletin santé de la semaine</h2>
-        <div id="carouselExampleControls" class="carousel slide mt-3" data-bs-ride="carousel" data-bs-interval="5000">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a href="https://www.legorafi.fr/2023/12/19/penurie-de-medicaments-le-gouvernement-recommande-de-mettre-une-gousse-dail-sous-son-oreiller/">
-                        <img src="medicaments.png" class="d-block" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Pénurie de médicaments – Le gouvernement recommande de mettre une gousse d’ail sous son oreiller</h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="https://www.legorafi.fr/2023/06/19/par-un-procede-revolutionnaire-des-scientifiques-reussissent-a-transformer-la-contrex-en-eau/">
-                        <img src="https://www.legorafi.fr/wp-content/uploads/2023/06/labo-2048x1152.jpg" class="d-block" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Par un procédé révolutionnaire, des scientifiques réussissent à transformer la Contrex en eau</h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="https://www.legorafi.fr/2024/05/24/une-etude-revele-que-les-gauchers-sont-plus-habiles-de-leur-main-gauche/">
-                        <img src="https://www.legorafi.fr/wp-content/uploads/2024/05/iStock-1253877737-2048x1365.jpg" class="d-block" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Une étude révèle que les gauchers sont plus habiles de leur main gauche</h5>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
+        <h1>Résultats de la recherche de médecin</h1>
+        <div class="d-flex justify-content-center">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Spécialité</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+                $requete = $bdd->prepare("SELECT * FROM professionnels WHERE nom LIKE '%$recherche%' OR prenom LIKE '%$recherche%' OR specialite LIKE '%$recherche%' OR email LIKE '%$recherche%'");
+                $result = $requete->execute();
+                if ($requete->rowCount() != 0) {
+                    while ($row = $requete->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>";
+                        echo "<td>" . $row['nom'] . "</td>";
+                        echo "<td>" . $row['prenom'] . "</td>";
+                        echo "<td>" . $row['specialite'] . "</td>";
+                        echo "<td>" . $row['email'] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<h5>Aucun résultat trouvé</h5>";
+                }
+                ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
-        <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </footer>
 
+
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
+    <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</footer>
 </div>
-
 </body>
-
 </html>
+

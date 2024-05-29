@@ -87,33 +87,16 @@ session_start();
                         echo "<td>" . $row['nom'] . "</td>";
                         echo "<td>" . $row['prenom'] . "</td>";
                         echo "<td>" . $row['email'] . "</td>";
-                        echo "<td><form action='modifier_role.php'>";
-                        $id = $row['id'];
-                        if ($row['type_compte'] == 1) {
-
-                            echo "<select name='type_compte$id' id='type_compte'>
-                                <option value='0'>Patient</option>
-                                <option value='1' selected>Médecin</option>
-                                <option value='2'>Administrateur</option>
-                            </select>";
+                        if ($row['type_compte'] == 2) {
+                            echo "<td>Administrateur</td>";
                         }
-                        else if ($row['type_compte'] == 2) {
-                            echo "<select name='type_compte$id' id='type_compte'>
-                                <option value='0'>Patient</option>
-                                <option value='1'>Médecin</option>
-                                <option value='2' selected>Administrateur</option>
-                            </select>";
+                        else if ($row['type_compte'] == 1) {
+                            echo "<td>Médecin</td>";
                         }
                         else {
-                            echo "<select name='type_compte$id' id='type_compte'>
-                                <option value='0' selected>Patient</option>
-                                <option value='1'>Médecin</option>
-                                <option value='2'>Administrateur</option>
-                            </select>";
+                            echo "<td>Utilisateur</td>";
                         }
-                        echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
-                        echo "<input type='submit' value='Modifier' class='m-1'>";
-                        echo "<td><a href='chat.php?receiver_id=" . $row['id'] . "'>Contacter</a> | <a href='supprimer_utilisateur.php?id=" . $row['id'] . "'>Supprimer</a></td>";
+                        echo "<td><a href='modifier_role.php?id=" . $row['id'] . "'>Modifier</a> | <a href='chat.php?receiver_id=" . $row['id'] . "'>Contacter</a> | <a href='supprimer_utilisateur.php?id=" . $row['id'] . "'>Supprimer</a></td>";
                         echo "</tr>";
                     }
                 } else {
