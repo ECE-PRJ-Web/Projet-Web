@@ -9,7 +9,7 @@ $dbname = "medicare";
 // Vérifier si toutes les informations sont passées en paramètre
 if (!isset($_POST['dispo_id']) || empty($_POST['dispo_id']) ||
     !isset($_POST['medecin_id']) || empty($_POST['medecin_id'])) {
-    die("Informations incomplètes");
+    die("Informations incomplètes" );
 }
 
 // Connexion à la base de données

@@ -9,7 +9,7 @@ $dbname = "medicare";
 // Vérifier si toutes les informations sont passées en paramètre
 if (!isset($_POST['dispo_labo_id']) || empty($_POST['dispo_labo_id']) ||
     !isset($_POST['services_labo_id']) || empty($_POST['services_labo_id'])) {
-    die("Informations incomplètes" );
+    die("Informations incomplètes");
 }
 
 // Connexion à la base de données
@@ -37,7 +37,7 @@ if ($result_dispo->num_rows > 0) {
     die("Disponibilité non trouvée");
 }
 
-// Insérer les informations du rendez-vous dans la table rendezvous_labo
+// Insérer les informations du rendez-vous dans la table rendezvous
 $date = date('Y-m-d'); // Vous pouvez ajuster cette valeur en fonction des informations de disponibilité
 $heure = $dispo_labo['heure_debut'];
 $sql_rdv = "INSERT INTO rendezvous (client_id, medecin_id, services_labo_id, date, heure, statut) VALUES ($client_id, NULL, $services_labo_id, '$date', '$heure', 'programmé')";
@@ -46,7 +46,11 @@ if ($conn->query($sql_rdv) === TRUE) {
     // Mettre à jour la disponibilité pour indiquer qu'elle n'est plus disponible
     $sql_update_dispo = "UPDATE disponibilites_labo SET disponible = 0 WHERE id = $dispo_labo_id";
     if ($conn->query($sql_update_dispo) === TRUE) {
-        echo "Rendez-vous confirmé avec succès.";
+        // Afficher un message de confirmation avec un pop-up
+        echo '<script type="text/javascript">
+                alert("Rendez-vous confirmé avec succès.");
+                window.location.href = "rendezvous.php"; // Redirection après confirmation
+              </script>';
     } else {
         die("Erreur lors de la mise à jour de la disponibilité: " . $conn->error);
     }
