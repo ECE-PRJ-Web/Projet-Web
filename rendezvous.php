@@ -18,11 +18,18 @@ if ($conn->connect_error) {
 
 $id_client = $_SESSION['id_client'];
 
-// Récupérer les rendez-vous du client
-$sql = "SELECT r.rdv_id, p.nom AS nom_medecin, p.prenom AS prenom_medecin, r.date, r.heure, r.statut
-        FROM rendezvous r
-        INNER JOIN professionnels p ON r.medecin_id = p.id
-        WHERE r.client_id = $id_client";
+// Récupérer les rendez-vous du client (médecins et laboratoires)
+$sql = "
+    (SELECT r.rdv_id, p.nom AS nom_professionnel, p.prenom AS prenom_professionnel, r.date, r.heure, r.statut, 'medecin' AS type
+     FROM rendezvous r
+     INNER JOIN professionnels p ON r.medecin_id = p.id
+     WHERE r.client_id = $id_client)
+    UNION
+    (SELECT r.rdv_id, sl.nom_service AS nom_professionnel, '' AS prenom_professionnel, r.date, r.heure, r.statut, 'laboratoire' AS type
+     FROM rendezvous r
+     INNER JOIN services_laboratoire sl ON r.services_labo_id = sl.service_id
+     WHERE r.client_id = $id_client)
+    ORDER BY date, heure";
 $result = $conn->query($sql);
 
 ?>
@@ -92,10 +99,14 @@ $result = $conn->query($sql);
             while ($row = $result->fetch_assoc()) {
                 echo "<div class='card my-3'>";
                 echo "<div class='card-body'>";
-                echo "<h5 class='card-title'>Dr. " . $row['nom_medecin'] . " " . $row['prenom_medecin'] . "</h5>";
-                echo "<p class='card-text'>Date: " . $row['date'] . ", Heure: " . $row['heure'] . "</p>";
-                if ($row['statut'] == 'programmé') {
-                    echo "<a href='supprimer_rdv.php?id=" . $row['rdv_id'] . "' class='btn btn-danger'>Supprimer le rendez-vous</a>";
+                if ($row['type'] == 'medecin') {
+                    echo "<h5 class='card-title'>Dr. " . htmlspecialchars($row['nom_professionnel']) . " " . htmlspecialchars($row['prenom_professionnel']) . "</h5>";
+                } else {
+                    echo "<h5 class='card-title'>Laboratoire: " . htmlspecialchars($row['nom_professionnel']) . "</h5>";
+                }
+                echo "<p class='card-text'>Date: " . htmlspecialchars($row['date']) . ", Heure: " . htmlspecialchars($row['heure']) . "</p>";
+                if ($row['statut'] == 'programmé' || $row['statut'] == 'réservé') {
+                    echo "<a href='supprimer_rdv.php?id=" . htmlspecialchars($row['rdv_id']) . "&type=" . htmlspecialchars($row['type']) . "' class='btn btn-danger'>Supprimer le rendez-vous</a>";
                 }
                 echo "</div>";
                 echo "</div>";
