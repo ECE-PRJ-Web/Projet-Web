@@ -1,32 +1,44 @@
 <?php
 session_start();
-$_SESSION['id']=session_id();
+if (!isset($_SESSION['connected']) || $_SESSION['connected'] !== true) {
+    header("Location: connexion.php");
+    exit();
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "medicare";
+
+// Connexion à la base de données
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$id_client = $_SESSION['id_client'];
+
+// Récupérer les rendez-vous du client
+$sql = "SELECT r.rdv_id, p.nom AS nom_medecin, p.prenom AS prenom_medecin, r.date, r.heure, r.statut
+        FROM rendezvous r
+        INNER JOIN professionnels p ON r.medecin_id = p.id
+        WHERE r.client_id = $id_client";
+$result = $conn->query($sql);
 
 ?>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Medicare: Services médicaux </title>
+    <title>Medicare: Rendez-vous</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="script.js"></script>
-    <style>
-        #carouselExampleControls img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-        h5{
-            color : red;
-        }
-    </style>
 </head>
 <body class="d-flex text-center">
 
 <div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
-        <h1>Medicare: Services médicaux</h1>
+        <h1>Medicare: Rendez-vous</h1>
         <div class="bd">
             <nav class="navbar navbar-expand-lg sticky-top mb-2">
                 <div class="container-fluid">
@@ -47,7 +59,7 @@ $_SESSION['id']=session_id();
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="rendezvous.php">Rendez-vous</a>
+                                <a class="nav-link" href="#">Rendez-vous</a>
                             </li>
                         </ul>
                         <?php if (isset($_SESSION['connected']) && $_SESSION['connected'] == true) {
@@ -73,46 +85,25 @@ $_SESSION['id']=session_id();
         </div>
     </div>
 
-
-
     <div class="container">
-        <h2 class="mt-3">Bulletin santé de la semaine</h2>
-        <div id="carouselExampleControls" class="carousel slide mt-3" data-bs-ride="carousel" data-bs-interval="5000">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a href="https://www.legorafi.fr/2023/12/19/penurie-de-medicaments-le-gouvernement-recommande-de-mettre-une-gousse-dail-sous-son-oreiller/">
-                        <img src="medicaments.png" class="d-block" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Pénurie de médicaments – Le gouvernement recommande de mettre une gousse d’ail sous son oreiller</h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="https://www.legorafi.fr/2023/06/19/par-un-procede-revolutionnaire-des-scientifiques-reussissent-a-transformer-la-contrex-en-eau/">
-                        <img src="https://www.legorafi.fr/wp-content/uploads/2023/06/labo-2048x1152.jpg" class="d-block" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Par un procédé révolutionnaire, des scientifiques réussissent à transformer la Contrex en eau</h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="https://www.legorafi.fr/2024/05/24/une-etude-revele-que-les-gauchers-sont-plus-habiles-de-leur-main-gauche/">
-                        <img src="https://www.legorafi.fr/wp-content/uploads/2024/05/iStock-1253877737-2048x1365.jpg" class="d-block" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Une étude révèle que les gauchers sont plus habiles de leur main gauche</h5>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
+        <h2 class="mt-3">Vos rendez-vous</h2>
+        <?php
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<div class='card my-3'>";
+                echo "<div class='card-body'>";
+                echo "<h5 class='card-title'>Dr. " . $row['nom_medecin'] . " " . $row['prenom_medecin'] . "</h5>";
+                echo "<p class='card-text'>Date: " . $row['date'] . ", Heure: " . $row['heure'] . "</p>";
+                if ($row['statut'] == 'programmé') {
+                    echo "<a href='supprimer_rdv.php?id=" . $row['rdv_id'] . "' class='btn btn-danger'>Supprimer le rendez-vous</a>";
+                }
+                echo "</div>";
+                echo "</div>";
+            }
+        } else {
+            echo "<p>Vous n'avez aucun rendez-vous programmé.</p>";
+        }
+        ?>
     </div>
 
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -124,5 +115,5 @@ $_SESSION['id']=session_id();
 </div>
 
 </body>
-
 </html>
+
