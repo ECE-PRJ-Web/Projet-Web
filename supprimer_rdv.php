@@ -33,7 +33,8 @@ if (isset($_GET['id'])) {
         if ($conn->query($sql_delete_rdv) === TRUE) {
             // Mettre à jour la disponibilité de l'heure de ce rendez-vous
             $id_dispo = $row_rdv['heure'];
-            $sql_update_dispo = "UPDATE disponibilites,rendezvous SET disponibilites.disponible = 1 WHERE rendezvous.medecin_id = disponibilites.medecin_id";
+            $medecin_id = $row_rdv['medecin_id']; // récupérer l'id du médecin
+            $sql_update_dispo = "UPDATE disponibilites SET disponible = 1 WHERE medecin_id = $medecin_id AND heure_debut = '$id_dispo' ";
             if ($conn->query($sql_update_dispo) === TRUE) {
                 echo "Rendez-vous supprimé avec succès";
                 header("Location: rendezvous.php");
