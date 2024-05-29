@@ -61,44 +61,79 @@ session_start();
             </nav>
         </div>
     </div>
-
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
-        <h2>Liste Médecins</h2>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Spécialité</th>
-                <th scope="col">Email</th>
-                <th scope="col">Photo</th>
-                <th scope="col">Vidéo</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
+        <h1 class="mb-4">Gestion des comptes</h1>
+        <div class="d-flex justify-content-center">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Type de compte</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+                $requete = $bdd->prepare("SELECT * FROM clients");
+                $result = $requete->execute();
+                if ($requete->rowCount() != 0) {
+                    while ($row = $requete->fetch()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['id'] . "</td>";
+                        echo "<td>" . $row['nom'] . "</td>";
+                        echo "<td>" . $row['prenom'] . "</td>";
+                        echo "<td>" . $row['email'] . "</td>";
+                        echo "<td><form action='modifier_role.php'>";
+                        $id = $row['id'];
+                        if ($row['type_compte'] == 1) {
 
-            <?php
-            $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
-            $requete = $bdd->prepare("SELECT * FROM professionnels");
-            $result = $requete->execute();
-            if ($requete->rowCount() != 0) {
-                while ($row = $requete->fetch()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['id'] . "</td>";
-                    echo "<td>" . $row['nom'] . "</td>";
-                    echo "<td>" . $row['prenom'] . "</td>";
-                    echo "<td>" . $row['specialite'] . "</td>";
-                    echo "<td>" . $row['email'] . "</td>";
-                    $img = $row['path_photo'];
-                    echo "<td><img src='$img' width='100' height='100' alt='...'></td>";
-                    echo "<td><video width='320' height='180' controls><source src='videos/" . $row['path_video'] . "' type='video/mp4'></video></td>";
-                    echo "<td><a href='chat.php?receiver_id=" . $row['id'] . "'>Contacter</a> | <a href='modifier_medecin.php?id=" . $row['id'] . "'>Modifier</a> | <a href='supprimer_medecin.php?id=" . $row['id'] . "'>Supprimer</a></td>";
-                    echo "</tr>";
+                            echo "<select name='type_compte$id' id='type_compte'>
+                                <option value='0'>Patient</option>
+                                <option value='1' selected>Médecin</option>
+                                <option value='2'>Administrateur</option>
+                            </select>";
+                        }
+                        else if ($row['type_compte'] == 2) {
+                            echo "<select name='type_compte$id' id='type_compte'>
+                                <option value='0'>Patient</option>
+                                <option value='1'>Médecin</option>
+                                <option value='2' selected>Administrateur</option>
+                            </select>";
+                        }
+                        else {
+                            echo "<select name='type_compte$id' id='type_compte'>
+                                <option value='0' selected>Patient</option>
+                                <option value='1'>Médecin</option>
+                                <option value='2'>Administrateur</option>
+                            </select>";
+                        }
+                        echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
+                        echo "<input type='submit' value='Modifier' class='m-1'>";
+                        echo "<td><a href='chat.php?receiver_id=" . $row['id'] . "'>Contacter</a> | <a href='supprimer_utilisateur.php?id=" . $row['id'] . "'>Supprimer</a></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "0 results";
                 }
-            } else {
-                echo "0 results";
-            }
-            ?>
-            </tbody>
+                ?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
+    <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</footer>
+</div>
+</body>
+</html>

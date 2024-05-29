@@ -65,3 +65,4 @@ session_start();
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
         <h2>Bienvenue sur l'espace Administrateur de Medicare ma couille</h2>
         <a href="gestion_medecin_admin.php" class="btn btn-primary mb-2">Gestion des médecins</a>
+        <a href="gestion_comptes_admin.php" class="btn btn-primary mb-2">Gestion des comptes</a>
