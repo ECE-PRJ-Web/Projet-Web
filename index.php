@@ -2,6 +2,13 @@
 session_start();
 $_SESSION['id']=session_id();
 
+if (isset($_SESSION['connected']) && $_SESSION['connected'] == true) {
+
+}
+
+else {
+    header('Location: connexion.php');
+}
 ?>
 <html lang="fr">
 <head>
@@ -42,7 +49,7 @@ $_SESSION['id']=session_id();
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="medecine_generale.php">Médecine Générale</a></li>
-                                    <li><a class="dropdown-item" href="#">Médecins Spécialistes</a></li>
+                                    <li><a class="dropdown-item" href="medecins_specialises.php">Médecins Spécialistes</a></li>
                                     <li><a class="dropdown-item" href="Laboratoire.php">Laboratoire de biologie médicale</a></li>
                                 </ul>
                             </li>
