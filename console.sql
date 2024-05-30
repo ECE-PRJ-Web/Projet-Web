@@ -20,11 +20,11 @@ CREATE TABLE clients (
 DROP TABLE IF EXISTS professionnels;
 
 CREATE TABLE professionnels (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT PRIMARY KEY,
     path_photo VARCHAR(255),
-    specialite VARCHAR(255),
+    specialite VARCHAR(255) DEFAULT 'Généraliste',
     path_video VARCHAR(255),
-    CV VARCHAR(255),
+    path_CV VARCHAR(255),
     FOREIGN KEY (id) REFERENCES clients(id)
 );
 

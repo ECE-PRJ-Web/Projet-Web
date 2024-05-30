@@ -81,7 +81,7 @@ session_start();
 
             <?php
             $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
-            $requete = $bdd->prepare("SELECT * FROM professionnels");
+            $requete = $bdd->prepare("SELECT * FROM professionnels JOIN clients ON professionnels.id = clients.id;");
             $result = $requete->execute();
             if ($requete->rowCount() != 0) {
                 while ($row = $requete->fetch()) {

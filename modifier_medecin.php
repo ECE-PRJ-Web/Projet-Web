@@ -11,10 +11,7 @@ $result = $requete->execute();
 
 if ($result) {
     $row = $requete->fetch();
-    $nom = $row['nom'];
-    $prenom = $row['prenom'];
     $specialite = $row['specialite'];
-    $email = $row['email'];
     $path_photo = $row['path_photo'];
     $path_video = $row['path_video'];
 
