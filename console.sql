@@ -21,16 +21,12 @@ DROP TABLE IF EXISTS professionnels;
 
 CREATE TABLE professionnels (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(255) NOT NULL,
-    prenom VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL ,
-    password VARCHAR(255) NOT NULL,
     path_photo VARCHAR(255),
     specialite VARCHAR(255),
     path_video VARCHAR(255),
-    CV VARCHAR(255)
+    CV VARCHAR(255),
+    FOREIGN KEY (id) REFERENCES clients(id)
 );
-
 
 
 DROP TABLE IF EXISTS disponibilites;
@@ -45,27 +41,43 @@ CREATE TABLE disponibilites (
                                 FOREIGN KEY (medecin_id) REFERENCES professionnels(id)
 );
 
-
-
-
--- Table des rendez-vous
-CREATE TABLE rendezvous (
-                            rdv_id INT AUTO_INCREMENT PRIMARY KEY,
-                            client_id INT,
-                            medecin_id INT,
-                            date DATE,
-                            heure TIME,
-                            statut ENUM('programmé', 'annulé', 'terminé') NOT NULL,
-                            FOREIGN KEY (client_id) REFERENCES clients(id),
-                            FOREIGN KEY (medecin_id) REFERENCES professionnels(id)
+DROP TABLE IF EXISTS `rendezvous`;
+CREATE TABLE IF NOT EXISTS `rendezvous` (
+                                            `rdv_id` int NOT NULL AUTO_INCREMENT,
+                                            `client_id` int DEFAULT NULL,
+                                            `medecin_id` int DEFAULT NULL,
+                                            `services_labo_id` int DEFAULT NULL,
+                                            `date` date DEFAULT NULL,
+                                            `heure` time DEFAULT NULL,
+                                            `statut` enum('programmé','annulé','terminé') NOT NULL,
+                                            PRIMARY KEY (`rdv_id`),
+                                            KEY `client_id` (`client_id`),
+                                            KEY `medecin_id` (`medecin_id`)
 );
 
--- Table des services du laboratoire
-CREATE TABLE services_laboratoire (
-                                      service_id INT AUTO_INCREMENT PRIMARY KEY,
-                                      nom_service VARCHAR(255) NOT NULL,
-                                      description TEXT
+
+DROP TABLE IF EXISTS `services_laboratoire`;
+CREATE TABLE IF NOT EXISTS `services_laboratoire` (
+                                                      `service_id` int NOT NULL AUTO_INCREMENT,
+                                                      `nom_service` varchar(255) NOT NULL,
+                                                      `title` text NOT NULL,
+                                                      `description` text NOT NULL,
+                                                      `details` text NOT NULL,
+                                                      PRIMARY KEY (`service_id`)
 );
+
+DROP TABLE IF EXISTS disponibilites_labo;
+
+CREATE TABLE disponibilites_labo (
+                                id INT AUTO_INCREMENT PRIMARY KEY,
+                                servives_labo_id INT,
+                                jour_semaine ENUM('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'),
+                                heure_debut TIME,
+                                heure_fin TIME,
+                                disponible BOOLEAN,
+                                FOREIGN KEY (servives_labo_id) REFERENCES  services_laboratoire(service_id)
+);
+
 
 -- Table des réservations de services de laboratoire
 CREATE TABLE reservations_services (
