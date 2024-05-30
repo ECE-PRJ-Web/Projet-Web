@@ -88,7 +88,10 @@ $recherche = $_GET['recherche'];
                 <tbody>
                 <?php
                 $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
-                $requete = $bdd->prepare("SELECT * FROM professionnels WHERE nom LIKE '%$recherche%' OR prenom LIKE '%$recherche%' OR specialite LIKE '%$recherche%' OR email LIKE '%$recherche%'");
+                $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+                $requete = $bdd->prepare("SELECT * FROM clients JOIN professionnels ON clients.id = professionnels.id WHERE clients.nom LIKE :recherche OR clients.prenom LIKE :recherche OR professionnels.specialite LIKE :recherche OR clients.email LIKE :recherche");
+                $recherche = "%$recherche%";
+                $requete->bindParam(':recherche', $recherche, PDO::PARAM_STR);
                 $result = $requete->execute();
                 if ($requete->rowCount() != 0) {
                     while ($row = $requete->fetch(PDO::FETCH_ASSOC)) {

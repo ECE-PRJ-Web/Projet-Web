@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Requête pour obtenir les professionnels
-$sql = "SELECT * FROM professionnels";
+$sql = "SELECT * FROM professionnels JOIN clients ON professionnels.id = clients.id WHERE professionnels.specialite = 'Généraliste'";
 $result = $conn->query($sql);
 
 $conn->close();
