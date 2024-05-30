@@ -1,14 +1,6 @@
 <?php
 session_start();
 $_SESSION['id']=session_id();
-
-if (isset($_SESSION['connected']) && $_SESSION['connected'] == true) {
-
-}
-
-else {
-    header('Location: connexion.php');
-}
 ?>
 <html lang="fr">
 <head>
@@ -69,8 +61,8 @@ else {
                             echo '</div>';
                         }
                         ?>
-                        <form class="d-flex navbar-nav mb-lg-0" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <form class="d-flex navbar-nav mb-lg-0" role="search" action="recherche.php">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="recherche">
                             <button class="btn btn-outline-success " type="submit">Search</button>
                         </form>
                     </div>

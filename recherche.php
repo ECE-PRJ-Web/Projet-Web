@@ -1,5 +1,7 @@
 <?php
 session_start();
+$_SESSION['id']=session_id();
+$recherche = $_GET['recherche'];
 ?>
 <html lang="fr">
 <head>
@@ -9,11 +11,20 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="script.js"></script>
+    <style>
+        #carouselExampleControls img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        h5{
+            color : red;
+        }
+    </style>
 </head>
 <body class="d-flex text-center">
 
-
-<div class="container" id="wrapper">
+<div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
         <h1>Medicare: Services médicaux</h1>
         <div class="bd">
@@ -30,13 +41,13 @@ session_start();
                                     Tout Parcourir
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Médecine Générale</a></li>
-                                    <li><a class="dropdown-item" href="#">Médecins Spécialistes</a></li>
-                                    <li><a class="dropdown-item" href="#">Laboratoire de biologie médicale</a></li>
+                                    <li><a class="dropdown-item" href="medecine_generale.php">Médecine Générale</a></li>
+                                    <li><a class="dropdown-item" href="medecins_specialises.php">Médecins Spécialistes</a></li>
+                                    <li><a class="dropdown-item" href="Laboratoire.php">Laboratoire de biologie médicale</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Rendez-vous</a>
+                                <a class="nav-link" href="rendezvous.php">Rendez-vous</a>
                             </li>
                         </ul>
                         <?php if (isset($_SESSION['connected']) && $_SESSION['connected'] == true) {
@@ -51,7 +62,7 @@ session_start();
                             echo '</div>';
                         }
                         ?>
-                        <form class="d-flex navbar-nav mb-lg-0" role="search">
+                        <form class="d-flex navbar-nav mb-lg-0" role="search" action="recherche.php">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success " type="submit">Search</button>
                         </form>
@@ -63,6 +74,49 @@ session_start();
     </div>
 
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
-        <h2>Bienvenue sur l'espace Administrateur de Medicare ma couille</h2>
-        <a href="gestion_medecin_admin.php" class="btn btn-primary mb-2">Gestion des médecins</a>
-        <a href="gestion_comptes_admin.php" class="btn btn-primary mb-2">Gestion des comptes</a>
+        <h1>Résultats de la recherche de médecin</h1>
+        <div class="d-flex justify-content-center">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Spécialité</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+                $requete = $bdd->prepare("SELECT * FROM professionnels WHERE nom LIKE '%$recherche%' OR prenom LIKE '%$recherche%' OR specialite LIKE '%$recherche%' OR email LIKE '%$recherche%'");
+                $result = $requete->execute();
+                if ($requete->rowCount() != 0) {
+                    while ($row = $requete->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>";
+                        echo "<td>" . $row['nom'] . "</td>";
+                        echo "<td>" . $row['prenom'] . "</td>";
+                        echo "<td>" . $row['specialite'] . "</td>";
+                        echo "<td>" . $row['email'] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<h5>Aucun résultat trouvé</h5>";
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
+    <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</footer>
+</div>
+</body>
+</html>
+

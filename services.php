@@ -6,29 +6,59 @@ $username = "root";
 $password = "";
 $dbname = "medicare";
 
+// Vérifier si l'ID du service est passé en paramètre
+if (!isset($_GET['service_id']) || empty($_GET['service_id'])) {
+    die("ID du service non spécifié");
+}
+
 // Connexion à la base de données
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if (!isset($_GET['service_id']) || empty($_GET['service_id'])) {
-    die("ID du service non spécifié");
-}
-
+// Récupérer les informations sur le service
 $service_id = intval($_GET['service_id']);
-
-// Requête pour obtenir les détails du service
 $sql_service = "SELECT * FROM services_laboratoire WHERE service_id = $service_id";
 $result_service = $conn->query($sql_service);
 
 if ($result_service->num_rows == 0) {
-    echo "Service non trouvé.";
-    exit;
+    die("Service non trouvé.");
 }
 
 $service = $result_service->fetch_assoc();
+
+// Récupérer les disponibilités du service
+$sql_dispo_labo = "SELECT * FROM disponibilites_labo WHERE services_labo_id = $service_id";
+$result_dispo_labo = $conn->query($sql_dispo_labo);
+
+// Créer un tableau associatif pour stocker les disponibilités par jour
+$disponibilites = array(
+    'lundi' => array(),
+    'mardi' => array(),
+    'mercredi' => array(),
+    'jeudi' => array(),
+    'vendredi' => array(),
+    'samedi' => array(),
+    'dimanche' => array()
+);
+
+// Remplir le tableau associatif avec les disponibilités
+if ($result_dispo_labo->num_rows > 0) {
+    while ($dispo = $result_dispo_labo->fetch_assoc()) {
+        $jour = $dispo['jour_semaine'];
+        $disponibilites[$jour][] = array(
+            'id' => $dispo['id'],
+            'heure_debut' => $dispo['heure_debut'],
+            'heure_fin' => $dispo['heure_fin'],
+            'disponible' => $dispo['disponible']
+        );
+    }
+}
+
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -44,52 +74,15 @@ $service = $result_service->fetch_assoc();
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px; /* Ajoute de l'espace en dessous */
-        }
-
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-        }
-        .day {
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .available, .unavailable {
-            display: block;
-            width: 100%;
-            margin-bottom: 5px;
-            padding: 5px;
-            border-radius: 5px;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-        }
-        .available {
-            background-color: blue;
-            color: white;
-        }
-        .unavailable {
-            background-color: red;
-            color: white;
-            cursor: not-allowed;
+            margin-bottom: 20px;
         }
         .day-header {
             font-weight: bold;
             text-align: center;
         }
     </style>
-    <script>
-        function bookTimeSlot(slotId) {
-            // Rediriger l'utilisateur vers une page de confirmation
-            window.location.href = 'reservation.php?slot_id=' + slotId;
-        }
-    </script>
 </head>
-<body class="d-flex">
+<body class="d-flex text-center">
 
 <div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success" style="--bs-bg-opacity: .3" id="header">
@@ -138,49 +131,48 @@ $service = $result_service->fetch_assoc();
     </div>
 
     <div class="container">
-        <div class = "container-1">
-        <h1 class="container-1 text-center"><?php echo htmlspecialchars($service['title']); ?></h1>
-        <p><?php echo nl2br(htmlspecialchars($service['description'])); ?></p>
+        <div class="container-1">
+            <h1 class="text-center"><?php echo htmlspecialchars($service['title']); ?></h1>
+            <p><?php echo nl2br(htmlspecialchars($service['description'])); ?></p>
         </div>
-        <div class = container-1>
-        <h2 class="text-center">Détails</h2>
-        <p><?php echo nl2br(htmlspecialchars($service['details'])); ?></p>
+        <div class="container-1">
+            <h2 class="text-center">Détails</h2>
+            <p><?php echo nl2br(htmlspecialchars($service['details'])); ?></p>
         </div>
-        <h2 class = "text-center">Calendrier des créneaux disponibles</h2>
-        <div class="calendar">
-            <?php
-            $jours_semaine = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
-
-            foreach ($jours_semaine as $jour) {
-                echo "<div class='day'>";
-                echo "<div class='day-header'>" . ucfirst($jour) . "</div>";
-
-                $sql_dispo_labo = "SELECT * FROM disponibilites_labo WHERE services_labo_id = $service_id AND jour_semaine = '$jour'";
-                $result_dispo = $conn->query($sql_dispo_labo);
-
-                if ($result_dispo->num_rows > 0) {
-                    while ($dispo = $result_dispo->fetch_assoc()) {
-                        $class = $dispo['disponible'] ? 'available' : 'unavailable';
-                        $disabled = $dispo['disponible'] ? '' : 'disabled';
-                        echo "<button class='time-slot $class' onclick='bookTimeSlot(" . $dispo['id'] . ")' $disabled>";
-                        echo htmlspecialchars($dispo['heure_debut']) . " - " . htmlspecialchars($dispo['heure_fin']);
-                        echo "</button>";
-                    }
-                } else {
-                    echo "<p>Aucune disponibilité trouvée.</p>";
-                }
-
-                echo "</div>";
-            }
-
-            $conn->close();
-            ?>
+        <h2 class="text-center">Calendrier des créneaux disponibles</h2>
+        <div class="row">
+            <?php foreach ($disponibilites as $jour => $dispos): ?>
+                <div class="col-md-4">
+                    <h5><?php echo ucfirst($jour); ?></h5>
+                    <ul class="list-group">
+                        <?php if (!empty($dispos)): ?>
+                            <?php foreach ($dispos as $dispo): ?>
+                                <li class="list-group-item">
+                                    <?php if ($dispo['disponible']): ?>
+                                        <form method="post" action="resa_labo.php">
+                                            <input type="hidden" name="dispo_labo_id" value="<?php echo $dispo['id']; ?>">
+                                            <input type="hidden" name="services_labo_id" value="<?php echo $service_id; ?>">
+                                            <button type="submit" name="submit" class="btn btn-outline-primary">
+                                                <?php echo htmlspecialchars($dispo['heure_debut'] . ' - ' . $dispo['heure_fin']); ?>
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <button class="btn btn-outline-secondary" disabled>
+                                            <?php echo htmlspecialchars($dispo['heure_debut'] . ' - ' . $dispo['heure_fin']); ?> (Indisponible)
+                                        </button>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li class="list-group-item">Aucune disponibilité ce jour.</li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            <?php endforeach; ?>
         </div>
+
     </div>
-</body>
-</html>
-
-<footer class="d-flex flex-wrap justify-content-between align-items-start py-3 my-4 border-top">
+    <footer class="d-flex flex-wrap justify-content-between align-items-start py-3 my-4 border-top">
         <div class="col-md-6 text-center">
             <h5>Nous retrouver</h5>
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

@@ -108,7 +108,7 @@ $conn->close();
                             echo '</div>';
                         }
                         ?>
-                        <form class="d-flex navbar-nav mb-lg-0" role="search">
+                        <form class="d-flex navbar-nav mb-lg-0" role="search" >
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
@@ -127,7 +127,7 @@ $conn->close();
                 <div class="ms-3">
                     <p>Spécialité: <?php echo htmlspecialchars($professionnel['specialite']); ?></p>
                     <p>Email: <?php echo htmlspecialchars($professionnel['email']); ?></p>
-                    <a href="#" class="btn btn-primary">Envoyer un message</a>
+                    <a href="<?php echo "chat.php?receiver_id=$id"?>" class="btn btn-primary">Envoyer un message</a>
                     <a href="tel:<?php echo htmlspecialchars($professionnel['path_video']); ?>" class="btn btn-success ms-2">Appeler</a>
                 </div>
             </div>
