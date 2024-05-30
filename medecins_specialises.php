@@ -1,5 +1,40 @@
 <?php
 session_start();
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "medicare";
+
+// Connexion à la base de données
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Requête pour obtenir les professionnels
+$sql = "SELECT DISTINCT specialite FROM professionnels";
+$result = $conn->query($sql);
+
+$specialites = [];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $specialites[] = $row['specialite'];
+    }
+}
+
+// Récupérer les médecins
+$sql = "SELECT * FROM medecins";
+$result = $conn->query($sql);
+
+$medecins = [];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $medecins[] = $row;
+    }
+}
+
+$conn->close();
 ?>
 
 <html lang="fr">
@@ -11,7 +46,7 @@ session_start();
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="script.js"></script>
     <style>
-        .domain-block {
+        .speciality-block {
             cursor: pointer;
             margin-bottom: 1rem;
             padding: 1rem;
@@ -74,51 +109,28 @@ session_start();
         </div>
     </div>
 
-
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-6 ">
-            <div class="domain-block" data-domain="general">
-                Médecine Générale
-            </div>
-            <div id="doctor-list" style="display: none;">
-
-                    <h3 id="domain-title"></h3>
-                    <ul id="doctor-names" class="list-group">
-                        <!-- List of doctors will appear here -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <?php foreach ($specialites as $specialite): ?>
+                <div class="speciality-block" data-specialite="<?= htmlspecialchars($specialite) ?>">
+                    <?= htmlspecialchars($specialite) ?>
+                </div>
+                <div class="medecin-list" data-specialite="<?= htmlspecialchars($specialite) ?>">
+                    <ul class="list-group">
+                        <?php foreach ($medecins as $medecin): ?>
+                            <?php if ($medecin['specialite'] == $specialite): ?>
+                                <li class="list-group-item">
+                                    <a href="medecin_detail.php?id=<?= $medecin['id'] ?>">
+                                        <?= htmlspecialchars($medecin['prenom'] . ' ' . $medecin['nom']) ?>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     </ul>
-
-            </div>
-            <div class="domain-block" data-domain="specialist">
-                Médecins Spécialistes
-            </div>
-            <div class="domain-block" data-domain="cardiology">
-                Cardiologie
-            </div>
-            <div class="domain-block" data-domain="neurology">
-                Neurologie
-            </div>
-            <div class="domain-block" data-domain="pediatrics">
-                Pédiatrie
-            </div>
-            <div class="domain-block" data-domain="dermatology">
-                Dermatologie
-            </div>
-            <div class="domain-block" data-domain="radiology">
-                Radiologie
-            </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
-    <!--
-    <div id="doctor-list" class="row justify-content-center mt-4" style="display: none;">
-        <div class="col-md-6 ">
-            <h3 id="domain-title"></h3>
-            <ul id="doctor-names" class="list-group">
-                <-- List of doctors will appear here --
-            </ul>
-        </div>
-    </div>
-    -->
-
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
         <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
@@ -128,44 +140,19 @@ session_start();
 </div>
 
 <script>
-    // Example data for doctors
-    const doctors = {
-        "general": ["Dr. Smith", "Dr. Johnson", "Dr. Brown"],
-        "specialist": ["Dr. Taylor", "Dr. Anderson", "Dr. Thomas"],
-        "cardiology": ["Dr. Martinez", "Dr. Hernandez", "Dr. Lopez"],
-        "neurology": ["Dr. Gonzalez", "Dr. Wilson", "Dr. Moore"],
-        "pediatrics": ["Dr. Jackson", "Dr. Lee", "Dr. Harris"],
-        "dermatology": ["Dr. Clark", "Dr. Lewis", "Dr. Robinson"],
-        "radiology": ["Dr. Walker", "Dr. Young", "Dr. Hall"]
-    };
-
-    document.querySelectorAll('.domain-block').forEach(block => {
+    document.querySelectorAll('.speciality-block').forEach(block => {
         block.addEventListener('click', function() {
-            const domain = this.getAttribute('data-domain');
-            const doctorList = doctors[domain];
-
-            // Update the doctor list
-            const doctorNames = document.getElementById('doctor-names');
-            doctorNames.innerHTML = '';
-            doctorList.forEach(doctor => {
-                const li = document.createElement('li');
-                li.className = 'list-group-item';
-                li.textContent = doctor;
-                doctorNames.appendChild(li);
+            const specialite = this.getAttribute('data-specialite');
+            document.querySelectorAll('.medecin-list').forEach(list => {
+                if (list.getAttribute('data-specialite') === specialite) {
+                    list.style.display = list.style.display === 'none' ? 'block' : 'none';
+                } else {
+                    list.style.display = 'none';
+                }
             });
-
-            // Update the title
-            //const domainTitle = document.getElementById('domain-title');
-            //domainTitle.textContent = this.textContent;
-
-            // Show the doctor list
-            document.getElementById('doctor-list').style.display = 'block';
         });
     });
 </script>
-
-
-
 
 
 </body>
