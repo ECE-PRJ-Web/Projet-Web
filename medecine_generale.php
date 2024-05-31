@@ -12,12 +12,17 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Requête pour obtenir les professionnels
-$sql = "SELECT * FROM professionnels JOIN clients ON professionnels.id = clients.id WHERE professionnels.specialite = 'Généraliste'";
+// Requête pour obtenir les médecins généralistes
+$sql = "SELECT p.id, p.path_photo, p.path_video, p.path_cv, p.specialite, c.nom, c.prenom, c.email 
+        FROM professionnels p 
+        INNER JOIN clients c ON p.id = c.id 
+        WHERE p.specialite = 'Généraliste'";
 $result = $conn->query($sql);
 
+// Fermer la connexion après l'exécution de la requête
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -85,11 +90,11 @@ $conn->close();
                     <?php while($professionnel = $result->fetch_assoc()): ?>
                         <li class="list-group-item">
                             <div class="d-flex align-items-center">
-                                <img src="<?php echo htmlspecialchars($professionnel['path_photo']); ?>" alt="Photo de <?php echo htmlspecialchars($professionnel['nom']); ?>" class="img-thumbnail" width="100" height="100">
+                                <img src="<?php echo htmlspecialchars($professionnel['path_photo'] ?? ''); ?>" alt="Photo de <?php echo isset($professionnel['nom']) ? htmlspecialchars($professionnel['nom']) : 'Nom inconnu'; ?>" class="img-thumbnail" width="100" height="100">
                                 <div class="ms-3">
-                                    <h5 class="mb-1"><?php echo htmlspecialchars($professionnel['nom'] . ' ' . $professionnel['prenom']); ?></h5>
-                                    <p class="mb-1">Spécialité: <?php echo htmlspecialchars($professionnel['specialite']); ?></p>
-                                    <p class="mb-1">Email: <?php echo htmlspecialchars($professionnel['email']); ?></p>
+                                    <h5 class="mb-1"><?php echo isset($professionnel['nom']) && isset($professionnel['prenom']) ? htmlspecialchars($professionnel['nom'] . ' ' . $professionnel['prenom']) : 'Nom inconnu'; ?></h5>
+                                    <p class="mb-1">Spécialité: <?php echo htmlspecialchars($professionnel['specialite'] ?? 'Spécialité inconnue'); ?></p>
+                                    <p class="mb-1">Email: <?php echo isset($professionnel['email']) ? htmlspecialchars($professionnel['email']) : 'Email inconnu'; ?></p>
                                     <a href="medecin_detail.php?id=<?php echo $professionnel['id']; ?>" class="btn btn-primary">Plus d'informations</a>
                                 </div>
                             </div>

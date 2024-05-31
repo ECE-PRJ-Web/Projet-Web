@@ -6,10 +6,9 @@ $username = "root";
 $password = "";
 $dbname = "medicare";
 
-// Vérifier si toutes les informations sont passées en paramètre
-if (!isset($_POST['dispo_id']) || empty($_POST['dispo_id']) ||
-    !isset($_POST['medecin_id']) || empty($_POST['medecin_id'])) {
-    die("Informations incomplètes" );
+// Vérifier si l'ID de la disponibilité est passé en paramètre
+if (!isset($_POST['dispo_id']) || empty($_POST['dispo_id'])) {
+    die("ID de la disponibilité non spécifié");
 }
 
 // Connexion à la base de données
@@ -18,21 +17,30 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Récupérer les informations du formulaire
-$dispo_id = $_POST['dispo_id'];
-$medecin_id = $_POST['medecin_id'];
-$client_id = $_SESSION['id_client']; // Récupérer l'ID du client depuis la session
-
-
 // Récupérer les informations sur la disponibilité
-$sql_dispo = "SELECT * FROM disponibilites WHERE id = $dispo_id";
-$result_dispo = $conn->query($sql_dispo);
+$dispo_id = $_POST['dispo_id'];
+$sql = "SELECT * FROM disponibilites WHERE id = $dispo_id";
+$result = $conn->query($sql);
 
-if ($result_dispo->num_rows > 0) {
-    $dispo = $result_dispo->fetch_assoc();
+if ($result->num_rows > 0) {
+    $dispo = $result->fetch_assoc();
 } else {
     die("Disponibilité non trouvée");
 }
+
+// Récupérer les informations sur le professionnel
+$medecin_id = $dispo['medecin_id'];
+$sql_medecin = "SELECT * FROM professionnels WHERE id = $medecin_id";
+$result_medecin = $conn->query($sql_medecin);
+
+if ($result_medecin->num_rows > 0) {
+    $professionnel = $result_medecin->fetch_assoc();
+} else {
+    die("Professionnel non trouvé");
+}
+
+// Récupérer l'ID du client depuis la session
+$client_id = $_SESSION['id_client'];
 
 // Insérer les informations du rendez-vous dans la table rendezvous
 $date = date('Y-m-d'); // Vous pouvez ajuster cette valeur en fonction des informations de disponibilité
@@ -43,7 +51,7 @@ if ($conn->query($sql_rdv) === TRUE) {
     // Mettre à jour la disponibilité pour indiquer qu'elle n'est plus disponible
     $sql_update_dispo = "UPDATE disponibilites SET disponible = 0 WHERE id = $dispo_id";
     if ($conn->query($sql_update_dispo) === TRUE) {
-        echo "Rendez-vous confirmé avec succès.";
+        echo "<script>alert('Rendez-vous confirmé avec succès.'); window.location.href = 'rendezvous.php';</script>";
     } else {
         die("Erreur lors de la mise à jour de la disponibilité: " . $conn->error);
     }

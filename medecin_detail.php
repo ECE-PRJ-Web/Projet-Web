@@ -19,7 +19,10 @@ if ($conn->connect_error) {
 
 // Récupérer les informations sur le professionnel
 $id = $_GET['id'];
-$sql = "SELECT * FROM professionnels WHERE id = $id";
+$sql = "SELECT p.id, p.path_photo, p.specialite, p.path_video, p.path_cv, c.nom, c.prenom, c.email 
+        FROM professionnels p 
+        INNER JOIN clients c ON p.id = c.id 
+        WHERE p.id = $id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -123,12 +126,24 @@ $conn->close();
         <br>
         <div class="lead">
             <div class="d-flex align-items-center">
-                <img src="<?php echo htmlspecialchars($professionnel['path_photo']); ?>" alt="Photo de <?php echo htmlspecialchars($professionnel['nom']); ?>" class="img-thumbnail" width="100" height="100">
+                <?php
+                $path_photo = $professionnel['path_photo'];
+                $nom = $professionnel['nom'];
+
+                if (!empty($path_photo)) {
+                    $path_photo = htmlspecialchars($path_photo);
+                    echo '<img src="' . $path_photo . '" alt="Photo de ' . htmlspecialchars($nom) . '" class="img-thumbnail" width="100" height="100">';
+                } else {
+                    echo '<p>Pas de photo disponible</p>';
+                }
+                ?>
+
+
                 <div class="ms-3">
                     <p>Spécialité: <?php echo htmlspecialchars($professionnel['specialite']); ?></p>
                     <p>Email: <?php echo htmlspecialchars($professionnel['email']); ?></p>
                     <a href="<?php echo "chat.php?receiver_id=$id"?>" class="btn btn-primary">Envoyer un message</a>
-                    <a href="tel:<?php echo htmlspecialchars($professionnel['path_video']); ?>" class="btn btn-success ms-2">Appeler</a>
+                    <a href="tel:<?php echo htmlspecialchars($professionnel['path_video'] ?? ''); ?>" class="btn btn-success ms-2">Appeler</a>
                 </div>
             </div>
         </div>
@@ -143,7 +158,7 @@ $conn->close();
                             <?php foreach ($dispos as $dispo): ?>
                                 <li class="list-group-item">
                                     <?php if ($dispo['disponible']): ?>
-                                        <form method="post" action="confirmation.php">
+                                        <form method="post" action="confirmer_rdv.php">
                                             <input type="hidden" name="dispo_id" value="<?php echo htmlspecialchars($dispo['id']); ?>">
                                             <button type="submit" name="submit" class="btn btn-outline-primary">
                                                 <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?>
