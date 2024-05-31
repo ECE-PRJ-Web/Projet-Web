@@ -8,9 +8,11 @@ $id = $_POST['id'];
 
 $uploaddir_image = 'images/';
 $uploaddir_video = 'videos/';
+$uploaddir_CV = 'CV/';
 
 $uploadfile_image = $uploaddir_image . basename($_FILES['photo']['name']);
 $uploadfile_video = $uploaddir_video . basename($_FILES['video']['name']);
+$uploadfile_CV = $uploaddir_CV . basename($_FILES['CV']['name']);
 
 if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadfile_image)) {
     $photo = $_FILES['photo'];
@@ -23,7 +25,7 @@ if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadfile_image)) {
     $result = $requete->execute();
 }
 
-if (isset($_FILES['video'])) {
+if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadfile_image)) {
     $video = $_FILES['video'];
     $video_name = $video['name'];
     $video_tmp_name = $video['tmp_name'];
@@ -31,6 +33,18 @@ if (isset($_FILES['video'])) {
     move_uploaded_file($video_tmp_name, $video_dest);
     $requete = $bdd->prepare("UPDATE professionnels SET path_video = :video WHERE id = :id");
     $requete->bindParam(':video', $video_dest);
+    $requete->bindParam(':id', $id);
+    $result = $requete->execute();
+}
+
+if (move_uploaded_file($_FILES['CV']['tmp_name'], $uploadfile_CV)) {
+    $CV = $_FILES['CV'];
+    $CV_name = $CV['name'];
+    $CV_tmp_name = $CV['tmp_name'];
+    $CV_dest = 'CV/' . $CV_name;
+    move_uploaded_file($CV_tmp_name, $CV_dest);
+    $requete = $bdd->prepare("UPDATE professionnels SET path_CV = :CV WHERE id = :id");
+    $requete->bindParam(':CV', $CV_dest);
     $requete->bindParam(':id', $id);
     $result = $requete->execute();
 }

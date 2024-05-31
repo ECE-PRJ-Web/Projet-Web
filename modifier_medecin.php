@@ -100,6 +100,10 @@ if ($result) {
                 <label for="video" class="form-label">Vidéo</label>
                 <input type="file" class="form-control" id="video" name="video">
             </div>
+            <div class="mb-3">
+                <label for="CV" class="form-label">CV</label>
+                <input type="file" class="form-control" id="CV" name="CV">
+            </div>
             <button type="submit" class="btn btn-primary">Modifier</button>
         </form>
     </div>
