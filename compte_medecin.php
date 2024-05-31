@@ -43,6 +43,31 @@ $nom = $_SESSION['nom'];
         </div>
     </div>
     <div class="container">
+    <form action="traitement_modification_medecin.php" method="POST">
+    <div class="mb-3">
+        <label for="disponible" class="form-label">Disponiblilté</label>
+        <select class="form-select" id="disponible" name="disponible">
+            <?php
+            $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+            $reponse = $bdd->prepare('SELECT disponible FROM professionnels WHERE id = :id');
+            $reponse->bindParam(':id', $_SESSION['id_client']);
+            $reponse->execute();
+            $donnees = $reponse->fetch();
+            if ($donnees['disponible'] == 1) {
+                echo '<option value="1" selected>Disponible</option>';
+                echo '<option value="0">Non disponible</option>';
+            } else {
+                echo '<option value="1">Disponible</option>';
+                echo '<option value="0" selected>Non disponible</option>';
+            }
+            ?>
+        </select>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Modifier</button>
+    </div>
+    </form>
+
         <h2 class="mt-3">Bienvenu Dr. <?php echo "$nom"?></h2>
         <h2 class="mt-3">Calendrier</h2>
 

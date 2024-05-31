@@ -25,7 +25,8 @@
         specialite VARCHAR(255) DEFAULT 'Généraliste',
         path_video VARCHAR(255),
         path_CV VARCHAR(255),
-        FOREIGN KEY (id) REFERENCES clients(id)
+        FOREIGN KEY (id) REFERENCES clients(id),
+        disponible BOOLEAN DEFAULT 1
     );
 
 
