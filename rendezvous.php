@@ -4,7 +4,6 @@ if (!isset($_SESSION['connected']) || $_SESSION['connected'] !== true) {
     header("Location: connexion.php");
     exit();
 }
-
 $servername = "localhost";
 $username = "root";
 $password = "";
