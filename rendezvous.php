@@ -22,7 +22,7 @@ $id_client = $_SESSION['id_client'];
 $sql = "
     (SELECT r.rdv_id, p.nom AS nom_professionnel, p.prenom AS prenom_professionnel, r.date, r.heure, r.statut, 'medecin' AS type
      FROM rendezvous r
-     INNER JOIN professionnels p ON r.medecin_id = p.id
+     INNER JOIN clients p ON r.medecin_id = p.id
      WHERE r.client_id = $id_client)
     UNION
     (SELECT r.rdv_id, sl.nom_service AS nom_professionnel, '' AS prenom_professionnel, r.date, r.heure, r.statut, 'laboratoire' AS type
@@ -34,6 +34,7 @@ $result = $conn->query($sql);
 
 ?>
 
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -127,4 +128,3 @@ $result = $conn->query($sql);
 
 </body>
 </html>
-
