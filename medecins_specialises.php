@@ -55,20 +55,20 @@ $conn->close();
     </div>
 
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column">
-        <div class="dropdown mt-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                Spécialités
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <?php while($specialite = $result_specialites->fetch_assoc()): ?>
-                    <li><a class="dropdown-item" href="medecins_specialises.php?specialite=<?php echo urlencode($specialite['specialite']); ?>"><?php echo htmlspecialchars($specialite['specialite']); ?></a></li>
-                <?php endwhile; ?>
-            </ul>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-4">Médecins Spécialistes</h2>
+            <div class="dropdown mt-2">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Spécialités
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <?php while($specialite = $result_specialites->fetch_assoc()): ?>
+                        <li><a class="dropdown-item" href="medecins_specialises.php?specialite=<?php echo urlencode($specialite['specialite']); ?>"><?php echo htmlspecialchars($specialite['specialite']); ?></a></li>
+                    <?php endwhile; ?>
+                </ul>
+            </div>
         </div>
-
-        <h2>Médecins Spécialistes</h2>
         <?php if (isset($_GET['specialite'])): ?>
-            <h3>Spécialité: <?php echo htmlspecialchars($_GET['specialite']); ?></h3>
         <?php endif; ?>
         <br>
         <div id="medecins" class="lead">
@@ -95,6 +95,7 @@ $conn->close();
             </ul>
         </div>
     </div>
+
     <?php include 'footer.php'; ?>
 </div>
 

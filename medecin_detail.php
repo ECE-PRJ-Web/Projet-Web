@@ -71,15 +71,42 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link href="menu.css" rel="stylesheet">
     <link href="footer.css" rel="stylesheet">
+    <style>
+        .container-2 {
+            border: 1px solid #ddd;
+            padding: 20px;
+            max-width: 400px;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+        }
+        .btn-custom {
+            margin-bottom: 20px;
+
+        }
+
+        .special-text {
+            font-weight: bold;
+            color: #333; /* Darker color for the text */
+        }
+    </style>
+
 </head>
 <body class="d-flex text-center">
 
 <div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success head" style="--bs-bg-opacity: .3" id="header">
         <div class="d-flex justify-content-between align-items-center" >
-            <h1 class="mb-1">Medicare</h1>
+            <h1 class="mb-1">
+                <span style="color: red;">Medi</span><span style="color: white;">care</span>
+            </h1>
             <h1 class = "mb-1"> Médecin</h1>
-            <img src="" alt="Logo de l'entreprise" class="logo">
+            <img src="medi_logo.png" alt="Logo de l'entreprise" class="logo">
         </div>
 
         <div class="bd">
@@ -87,11 +114,11 @@ $conn->close();
         </div>
     </div>
 
-    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column">
+    <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column ">
         <h2><?php echo htmlspecialchars($professionnel['nom'] . ' ' . $professionnel['prenom']); ?></h2>
         <br>
-        <div class="lead">
-            <div class="d-flex align-items-center">
+        <div class="lead container-2">
+            <div class="d-flex align-items-center ">
                 <?php
                 $path_photo = $professionnel['path_photo'];
                 $nom = $professionnel['nom'];
@@ -104,16 +131,17 @@ $conn->close();
                 }
                 ?>
 
-
                 <div class="ms-3">
-                    <p>Spécialité: <?php echo htmlspecialchars($professionnel['specialite']); ?></p>
-                    <p>Email: <?php echo htmlspecialchars($professionnel['email']); ?></p>
-                    <a href="<?php echo "chat.php?receiver_id=$id"?>" class="btn btn-primary">Envoyer un message</a>
+                   <p><span class="special-text">Spécialité: </span> <span> <?php echo htmlspecialchars($professionnel['specialite']); ?></span></p>
+                    <p><span class ="special-text">Email: </span> <span> <?php echo htmlspecialchars($professionnel['email']); ?></span></p>
+                    <a href="<?php echo "chat.php?receiver_id=$id"?>" class="btn btn-primary btn-custom">Envoyer un message</a>
                     <a href="tel:<?php echo htmlspecialchars($professionnel['path_video'] ?? ''); ?>" class="btn btn-success ms-2">Appeler</a>
                 </div>
             </div>
         </div>
-        <br>
+    </div>
+
+    <br>
         <h3>Disponibilités</h3>
         <div class="row">
             <?php foreach ($disponibilites as $jour => $dispos): ?>
@@ -146,10 +174,11 @@ $conn->close();
         </div>
         <br>
         <a href="medecine_generale.php" class="btn btn-secondary">Retourner à la liste des professionnels</a>
-    </div>
-
     <?php include 'footer.php'; ?>
 
 </div>
+
+
+
 </body>
 </html>

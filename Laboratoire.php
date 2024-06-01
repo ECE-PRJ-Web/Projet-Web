@@ -97,9 +97,11 @@ $conn->close();
 <div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success head" style="--bs-bg-opacity: .3" id="header">
         <div class="d-flex justify-content-between align-items-center" >
-            <h1 class="mb-1">Medicare</h1>
+            <h1 class="mb-1">
+                <span style="color: red;">Medi</span><span style="color: white;">care</span>
+            </h1>
             <h1 class = "mb-1"> Laboratoire</h1>
-            <img src="" alt="Logo de l'entreprise" class="logo">
+            <img src="medi_logo.png" alt="Logo de l'entreprise" class="logo">
         </div>
 
         <div class="bd">

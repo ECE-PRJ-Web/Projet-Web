@@ -11,6 +11,18 @@ session_start();
     <script src="script.js"></script>
     <link href="menu.css" rel="stylesheet">
     <link href="footer.css" rel="stylesheet">
+    <style>
+        .container-1 {
+            margin-left: 18%;
+            max-width: 800px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body class="d-flex text-center">
 
@@ -21,7 +33,7 @@ session_start();
                 <span style="color: red;">Medi</span><span style="color: white;">care</span>
             </h1>
 
-            <h1 class = "mb-1"> Services Médicaux</h1>
+            <h1 class = "mb-1">Mon compte</h1>
             <img src="medi_logo.png" alt="Logo de l'entreprise" class="logo">
         </div>
 
@@ -43,8 +55,7 @@ session_start();
             echo "<p>Type compte: $type_compte </p>";
         }
         ?>
-        <h2>Mon compte</h2>
-
+        <div class = "container-1">
         <h3>Mes informations</h3>
         <p>Nom: <?php echo $_SESSION['nom'] ?></p>
         <p>Prénom: <?php echo $_SESSION['prenom'] ?></p>
@@ -68,9 +79,10 @@ session_start();
             echo "<p> Numéro de carte vitale: Non renseigné </p>";
 
         }?>
-        <a href="edition_donnes_clients.php" class="btn btn-primary mb-2">Modifier mes informations</a>
-        <a href="deconnexion.php" class="btn btn-danger">Déconnexion</a>
 
+        <a href="edition_donnes_clients.php" class="btn btn-primary mb-2">Modifier mes informations</a>
+        <a href="deconnexion.php" class="btn btn-danger mb-2">Déconnexion</a>
+        </div>
     </div>
 <?php include 'footer.php'; ?>
 </div>

@@ -74,18 +74,13 @@ session_start();
                     echo '<input type="text" class="form-control" id="CarteVitale" name="CarteVitale" value="">';
                 }?>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Valider</button>
+            <button type="submit" class="btn btn-primary mt-3" style = "background-color: green">Valider</button>
 
     </div>
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <p class="col-md-4 mb-0 text-body-secondary">© 2024 SA Medicare</p>
-        <p class="col-md-4 mb-0 text-body-secondary">51 Rue Trayne Cul, 69620 Val d'Oingt</p>
+    <?php include 'footer.php'; ?>
 
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2774.1514899926615!2d4.580111175787794!3d45.94825620101239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4886b1b8a7331%3A0x8cc507515c81c158!2sRue%20Trayne%20Cul%2C%2069620%20Val%20d&#39;Oingt!5e0!3m2!1sfr!2sfr!4v1716677967175!5m2!1sfr!2sfr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </footer>
 </div>
 
-<?php include 'footer.php'; ?>
 
 </body>
 </html>
