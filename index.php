@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['id']=session_id();
+$_SESSION['id'] = session_id();
 ?>
 <html lang="fr">
 <head>
@@ -21,6 +21,7 @@ $_SESSION['id']=session_id();
             background-color: #f9f9f9;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
         /* Heading style */
@@ -28,6 +29,7 @@ $_SESSION['id']=session_id();
             text-align: center;
             font-family: 'Arial', sans-serif;
             color: #333;
+            margin-bottom: 20px;
         }
 
         /* Carousel controls styling */
@@ -72,6 +74,43 @@ $_SESSION['id']=session_id();
             background-color: #000;
         }
 
+        /* Style for the explanation text and button */
+        .explanation {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+
+
+        .explanation p {
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+
+        .btn-more {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px; /* Add padding for a better appearance */
+            cursor: pointer;
+            color: #0d47a1;
+            text-decoration: none;
+            border: 2px solid #0d47a1; /* Add border for the button */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #ffffff; /* Background color for the button */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+        }
+
+        .btn-more:hover {
+            color: #ffffff;
+            background-color: #0d47a1;
+            border-color: #0d47a1;
+        }
     </style>
 </head>
 
@@ -81,7 +120,7 @@ $_SESSION['id']=session_id();
     <div class="bg-info bg-gradient bg-success head" style="--bs-bg-opacity: .3" id="header">
         <div class="d-flex justify-content-between align-items-center" >
             <h1 class="mb-1">
-                    <span style="color: red;">Medi</span><span style="color: white;">care</span>
+                <span style="color: red;">Medi</span><span style="color: white;">care</span>
             </h1>
 
             <h1 class = "mb-1"> Services Médicaux</h1>
@@ -90,6 +129,21 @@ $_SESSION['id']=session_id();
 
         <div class="bd">
             <?php include 'menu.php'; ?>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="explanation">
+            <h2>Bienvenue sur notre site de Services Médicaux</h2>
+            <p class="intro">Notre site vous propose une large gamme de services médicaux pour répondre à tous vos besoins de santé. Découvrez nos différentes prestations, nos conseils santé et bien plus encore.</p>
+            <p class="details" style="display: none;">Les plateformes médicales sont souvent compliquées à prendre en main pour les clients et pour les médecins. C'est pourquoi une équipe de quatres développeurs se sont donné comme mission de créer une plateforme claire permettant de prendre des rendez-vous médicaux, de passer des examens et même de faire des consultations en ligne : Medicare. La plateforme permet aussi de s'informer avec la présentation des dernières actualités médicales dans le monde pour sensibilisé la population à ce monde trop peu représenté.
+
+                Pour vos rendez-vous médicaux, vous aurez le choix entre de nombreux médecins généralistes et plusieurs médecins spécialistes en addictologie, andrologie, cardiologie, dermatologie, gastro-hépato-entérologie, gynécologie, IST, ostéopathie et bien d'autres.
+                Pour vous rassurer lors de votre prise de rendez-vous, Medicare vous permet de consulter les CV des medecins pour que vous choisissiez celui qui vous correspond le mieux. Vous pourrez ensuite choisir votre crénaux de rendez-vous sur la page de présentation du médecin. Si vous souhaitez simplement lui poser quelques questions rapides ne nécessitant pas de prendre un rendez-vous, vous aurez la possibilité de le contacter par email, sms ou par visioconférence s'il est disponible à ce moment là.
+
+                Enfin, vous pourrez prendre rendez-vous dans notre laboratoire médiacal afin de passer divers examens médicaux.
+            </p>
+            <span class="btn-more" onclick="showMore()">En savoir plus</span>
         </div>
     </div>
 
@@ -132,8 +186,22 @@ $_SESSION['id']=session_id();
             </button>
         </div>
     </div>
-<?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
+
+    <script>
+        function showMore() {
+            var details = document.querySelector('.explanation .details');
+            var button = document.querySelector('.explanation .btn-more');
+            if (details.style.display === "block") {
+                details.style.display = "none";
+                button.textContent = "En savoir plus";
+            } else {
+                details.style.display = "block";
+                button.textContent = "Afficher moins";
+            }
+        }
+    </script>
 
 </body>
-
 </html>
+
