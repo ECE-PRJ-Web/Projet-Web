@@ -88,7 +88,6 @@ $result = $conn->query($sql);
 
     <?php include 'footer.php'; ?>
 
-
 </div>
 
 </body>

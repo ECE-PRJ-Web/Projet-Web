@@ -19,7 +19,7 @@ if ($conn->connect_error) {
 
 // Récupérer les informations sur le professionnel
 $id = $_GET['id'];
-$sql = "SELECT p.id, p.path_photo, p.specialite, p.path_video, p.path_cv, c.nom, c.prenom, c.email 
+$sql = "SELECT p.id, p.path_photo, p.specialite, p.path_video, p.path_cv, p.disponible, c.nom, c.prenom, c.email 
         FROM professionnels p 
         INNER JOIN clients c ON p.id = c.id 
         WHERE p.id = $id";
@@ -87,25 +87,28 @@ $conn->close();
         }
         .btn-custom {
             margin-bottom: 20px;
-
         }
-
         .special-text {
             font-weight: bold;
             color: #333; /* Darker color for the text */
         }
+        .btn-disabled {
+            background-color: grey;
+            border-color: grey;
+            pointer-events: none;
+            color: white;
+        }
     </style>
-
 </head>
 <body class="d-flex text-center">
 
 <div class="container-fluid" id="wrapper">
     <div class="bg-info bg-gradient bg-success head" style="--bs-bg-opacity: .3" id="header">
-        <div class="d-flex justify-content-between align-items-center" >
+        <div class="d-flex justify-content-between align-items-center">
             <h1 class="mb-1">
                 <span style="color: red;">Medi</span><span style="color: white;">care</span>
             </h1>
-            <h1 class = "mb-1"> Médecin</h1>
+            <h1 class="mb-1"> Médecin</h1>
             <img src="medi_logo.png" alt="Logo de l'entreprise" class="logo">
         </div>
 
@@ -132,9 +135,13 @@ $conn->close();
                 ?>
 
                 <div class="ms-3">
-                   <p><span class="special-text">Spécialité: </span> <span> <?php echo htmlspecialchars($professionnel['specialite']); ?></span></p>
-                    <p><span class ="special-text">Email: </span> <span> <?php echo htmlspecialchars($professionnel['email']); ?></span></p>
-                    <a href="<?php echo "chat.php?receiver_id=$id"?>" class="btn btn-primary btn-custom">Envoyer un message</a>
+                    <p><span class="special-text">Spécialité: </span><span><?php echo htmlspecialchars($professionnel['specialite']); ?></span></p>
+                    <p><span class="special-text">Email: </span><span><?php echo htmlspecialchars($professionnel['email']); ?></span></p>
+                    <?php if ($professionnel['disponible']): ?>
+                        <a href="<?php echo "chat.php?receiver_id=$id"?>" class="btn btn-primary btn-custom">Envoyer un message</a>
+                    <?php else: ?>
+                        <button class="btn btn-primary btn-custom btn-disabled">Envoyer un message</button>
+                    <?php endif; ?>
                     <a href="tel:<?php echo htmlspecialchars($professionnel['path_video'] ?? ''); ?>" class="btn btn-success ms-2">Appeler</a>
                 </div>
             </div>
@@ -142,43 +149,40 @@ $conn->close();
     </div>
 
     <br>
-        <h3>Disponibilités</h3>
-        <div class="row">
-            <?php foreach ($disponibilites as $jour => $dispos): ?>
-                <div class="col-md-4">
-                    <h5><?php echo ucfirst($jour); ?></h5>
-                    <ul class="list-group">
-                        <?php if (!empty($dispos)): ?>
-                            <?php foreach ($dispos as $dispo): ?>
-                                <li class="list-group-item">
-                                    <?php if ($dispo['disponible']): ?>
-                                        <form method="post" action="confirmer_rdv.php">
-                                            <input type="hidden" name="dispo_id" value="<?php echo htmlspecialchars($dispo['id']); ?>">
-                                            <button type="submit" name="submit" class="btn btn-outline-primary">
-                                                <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?>
-                                            </button>
-                                        </form>
-                                    <?php else: ?>
-                                        <button class="btn btn-outline-secondary" disabled>
-                                            <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?> (Indisponible)
+    <h3>Disponibilités</h3>
+    <div class="row">
+        <?php foreach ($disponibilites as $jour => $dispos): ?>
+            <div class="col-md-4">
+                <h5><?php echo ucfirst($jour); ?></h5>
+                <ul class="list-group">
+                    <?php if (!empty($dispos)): ?>
+                        <?php foreach ($dispos as $dispo): ?>
+                            <li class="list-group-item">
+                                <?php if ($dispo['disponible']): ?>
+                                    <form method="post" action="confirmer_rdv.php">
+                                        <input type="hidden" name="dispo_id" value="<?php echo htmlspecialchars($dispo['id']); ?>">
+                                        <button type="submit" name="submit" class="btn btn-outline-primary">
+                                            <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?>
                                         </button>
-                                    <?php endif; ?>
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <li class="list-group-item">Aucune disponibilité ce jour.</li>
-                        <?php endif; ?>
-                    </ul>
-                </div>
-            <?php endforeach; ?>
-        </div>
-        <br>
-        <a href="medecine_generale.php" class="btn btn-secondary">Retourner à la liste des professionnels</a>
+                                    </form>
+                                <?php else: ?>
+                                    <button class="btn btn-outline-secondary" disabled>
+                                        <?php echo htmlspecialchars($dispo['heure_debut'] . ' à ' . $dispo['heure_fin']); ?> (Indisponible)
+                                    </button>
+                                <?php endif; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li class="list-group-item">Aucune disponibilité ce jour.</li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <br>
+    <a href="medecine_generale.php" class="btn btn-secondary">Retourner à la liste des professionnels</a>
     <?php include 'footer.php'; ?>
 
 </div>
-
-
-
 </body>
 </html>
