@@ -41,7 +41,7 @@ $nom = $_SESSION['nom'];
                 <?php include 'menu.php'; ?>
             </div>
         </div>
-    </div>
+
     <div class="container">
     <form action="traitement_modification_medecin.php" method="POST">
     <div class="mb-3">
@@ -93,3 +93,14 @@ $nom = $_SESSION['nom'];
                 echo '<td><a href="chat.php?receiver_id=' . $donnees['id'] . '">Contacter</a></td>';
                 echo '</tr>';
             }
+            ?>
+            </tbody>
+        </table>
+    </div>
+        <?php include 'footer.php'; ?>
+
+    </div>
+
+</body>
+</html>
+
