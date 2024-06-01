@@ -50,10 +50,6 @@ session_start();
         else if (isset($_SESSION['type_compte']) && $_SESSION['type_compte'] == 2) {
             echo '<a href="compte_admin.php" class="btn btn-primary mb-2">Mon compte administrateur</a>';
         }
-        else {
-            $type_compte = $_SESSION['type_compte'];
-            echo "<p>Type compte: $type_compte </p>";
-        }
         ?>
         <div class = "container-1">
         <h3>Mes informations</h3>

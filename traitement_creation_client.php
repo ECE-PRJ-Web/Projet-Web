@@ -34,6 +34,26 @@ else {
     $reussi = false;
 }
 
+$requete = $bdd->prepare("SELECT * FROM clients WHERE email = :mail");
+$requete->bindParam(':mail', $mail);
+
+$requete->execute();
+$reussi = false;
+if ($requete->rowCount() != 0) {
+    $client = $requete->fetch();
+    if ($client['password'] == $password) {
+        $_SESSION['connected'] = true;
+        $_SESSION['id_client'] = $client['id'];
+        $_SESSION['nom'] = $client['nom'];
+        $_SESSION['prenom'] = $client['prenom'];
+        $_SESSION['mail'] = $client['email'];
+        $_SESSION['adresse'] = $client['address'];
+        $_SESSION['CarteVitale'] = $client['CarteVitale'];
+        $_SESSION['type_compte'] = $client['type_compte'];
+        $reussi = true;
+    }
+}
+
 ?>
 
 <html lang="fr">

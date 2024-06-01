@@ -17,9 +17,9 @@ $sql_specialites = "SELECT DISTINCT specialite FROM professionnels";
 $result_specialites = $conn->query($sql_specialites);
 
 // Requête pour obtenir les médecins spécialisés
-$sql_medecins = "SELECT p.id, p.path_photo, p.path_video, p.path_cv, p.specialite, c.nom, c.prenom, c.email 
-                FROM professionnels p 
-                INNER JOIN clients c ON p.id = c.id";
+$sql_medecins = "SELECT p.id, p.path_photo, p.path_video, p.path_cv, p.specialite, c.nom, c.prenom, c.email
+                FROM professionnels p
+                INNER JOIN clients c ON p.id = c.id WHERE p.specialite != 'Généraliste';";
 $result_medecins = $conn->query($sql_medecins);
 
 // Fermer la connexion après l'exécution de la requête
