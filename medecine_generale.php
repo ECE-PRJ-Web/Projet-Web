@@ -86,8 +86,9 @@ $conn->close();
                 <?php endif; ?>
             </ul>
         </div>
-    </div>
     <?php include 'footer.php'; ?>
+    </div>
+
 
 
 </body>

@@ -72,12 +72,12 @@
 
     CREATE TABLE disponibilites_labo (
                                     id INT AUTO_INCREMENT PRIMARY KEY,
-                                    servives_labo_id INT,
+                                    services_labo_id INT,
                                     jour_semaine ENUM('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'),
                                     heure_debut TIME,
                                     heure_fin TIME,
                                     disponible BOOLEAN,
-                                    FOREIGN KEY (servives_labo_id) REFERENCES  services_laboratoire(service_id)
+                                    FOREIGN KEY (services_labo_id) REFERENCES  services_laboratoire(service_id)
     );
 
 
