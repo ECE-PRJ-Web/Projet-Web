@@ -21,7 +21,7 @@ session_start();
                 <span style="color: red;">Medi</span><span style="color: white;">care</span>
             </h1>
 
-            <h1 class = "mb-1"> Services Médicaux</h1>
+            <h1 class = "mb-1">Gestion des médecins</h1>
             <img src="medi_logo.png" alt="Logo de l'entreprise" class="logo">
         </div>
 
@@ -31,7 +31,6 @@ session_start();
     </div>
 
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column justify-content-center">
-        <h2>Liste Médecins</h2>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -70,3 +69,11 @@ session_start();
             }
             ?>
             </tbody>
+        </table>
+    </div>
+    <?php include 'footer.php'; ?>
+
+</div>
+
+</body>
+</html>

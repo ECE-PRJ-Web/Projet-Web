@@ -59,7 +59,6 @@ $conn->close();
     </div>
 
     <div id="content" class="cover-container d-flex w-100 p-3 mx-auto flex-column">
-        <h2>Médecins Généralistes</h2>
         <br>
         <div id="medecins" class="lead">
             <ul class="list-group">
@@ -90,7 +89,6 @@ $conn->close();
     </div>
     <?php include 'footer.php'; ?>
 
-</div>
 
 </body>
 </html>

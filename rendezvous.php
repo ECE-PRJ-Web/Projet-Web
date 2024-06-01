@@ -53,7 +53,7 @@ $result = $conn->query($sql);
                 <span style="color: red;">Medi</span><span style="color: white;">care</span>
             </h1>
 
-            <h1 class = "mb-1"> Services Médicaux</h1>
+            <h1 class = "mb-1">Vos rendez-vous</h1>
             <img src="medi_logo.png" alt="Logo de l'entreprise" class="logo">
         </div>
 
@@ -63,7 +63,6 @@ $result = $conn->query($sql);
     </div>
 
     <div class="container">
-        <h2 class="mt-3">Vos rendez-vous</h2>
         <?php
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
