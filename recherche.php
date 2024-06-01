@@ -48,15 +48,14 @@ $recherche = $_GET['recherche'];
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Prénom</th>
                     <th scope="col">Spécialité</th>
+                    <th scope="col">Détails</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
                 $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
                 $requete = $bdd->prepare("SELECT * FROM clients JOIN professionnels ON clients.id = professionnels.id WHERE clients.nom LIKE :recherche OR clients.prenom LIKE :recherche OR professionnels.specialite LIKE :recherche OR clients.email LIKE :recherche");
                 $recherche = "%$recherche%";
@@ -68,8 +67,7 @@ $recherche = $_GET['recherche'];
                         echo "<td>" . $row['nom'] . "</td>";
                         echo "<td>" . $row['prenom'] . "</td>";
                         echo "<td>" . $row['specialite'] . "</td>";
-                        echo "<td>" . $row['email'] . "</td>";
-                        echo "</tr>";
+                        echo "<td><a href='details_medecin.php?id=" . $row['id'] . "'>Détails</a></td>";
                     }
                 } else {
                     echo "<h5>Aucun résultat trouvé</h5>";
@@ -78,6 +76,43 @@ $recherche = $_GET['recherche'];
                 </tbody>
             </table>
         </div>
+        <h1>Résultats de la recherche de service de laboratoire</h1>
+        <div class="d-flex justify-content-center">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Nom du service</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Salle</th>
+                    <th scope="col">Détails</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
+                $requete = $bdd->prepare("SELECT * FROM services_laboratoire WHERE nom_service LIKE :recherche OR description LIKE :recherche OR salle LIKE :recherche");
+                $recherche = "%$recherche%";
+                $requete->bindParam(':recherche', $recherche, PDO::PARAM_STR);
+                $result = $requete->execute();
+                if ($requete->rowCount() != 0) {
+                    while ($row = $requete->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>";
+                        echo "<td>" . $row['nom_service'] . "</td>";
+                        echo "<td>" . $row['description'] . "</td>";
+                        echo "<td>" . $row['salle'] . "</td>";
+                        echo "<td><a href='services.php?service_id=" . $row['service_id'] . "'>Détails</a></td>";
+                    }
+                } else {
+                    echo "<h5>Aucun résultat trouvé</h5>";
+                }
+                ?>
+
+
+                </tbody>
+            </table>
+        </div>
+
+
     </div>
 
 

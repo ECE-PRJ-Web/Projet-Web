@@ -64,6 +64,7 @@
                                                           `title` text NOT NULL,
                                                           `description` text NOT NULL,
                                                           `details` text NOT NULL,
+                                                          `salle` varchar(50) DEFAULT NULL,
                                                           PRIMARY KEY (`service_id`)
     );
 

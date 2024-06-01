@@ -33,7 +33,7 @@
             }
             ?>
             <form class="d-flex navbar-nav mb-lg-0" role="search" action="recherche.php">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="recherche">
                 <button class="btn btn-outline-success " type="submit">Search</button>
             </form>
         </div>

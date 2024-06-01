@@ -1,8 +1,14 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['id_client'])) {
+    header('Location: connexion.php');
+}
+
 $reciever_id = $_GET['receiver_id'];
 $sender_id = $_SESSION['id_client'];
+
+
 
 
 $bdd = new PDO('mysql:host=localhost;dbname=medicare', 'root', '');
