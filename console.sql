@@ -346,31 +346,35 @@ INSERT INTO `messages` (`message_id`, `expediteur_id`, `destinataire_id`, `date_
 
 -- --------------------------------------------------------
 
---
+
 -- Structure de la table `professionnels`
 --
 
 DROP TABLE IF EXISTS `professionnels`;
 CREATE TABLE IF NOT EXISTS `professionnels` (
-  `id` int NOT NULL,
-  `path_photo` varchar(255) DEFAULT NULL,
-  `specialite` varchar(255) DEFAULT 'Généraliste',
-  `path_video` varchar(255) DEFAULT NULL,
-  `path_CV` varchar(255) DEFAULT NULL,
-  `disponible` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+                                                `id` int NOT NULL,
+                                                `path_photo` varchar(255) DEFAULT NULL,
+    `specialite` varchar(255) DEFAULT 'Généraliste',
+    `path_video` varchar(255) DEFAULT NULL,
+    `path_CV` varchar(255) DEFAULT NULL,
+    `disponible` tinyint(1) DEFAULT '1',
+    PRIMARY KEY (`id`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `professionnels`
 --
 
 INSERT INTO `professionnels` (`id`, `path_photo`, `specialite`, `path_video`, `path_CV`, `disponible`) VALUES
-(3, 'Photo/Gabi.JPG', 'Cardiologue', NULL, NULL, 1),
-(6, 'Photo/Noel.JPG\r\n', 'Généraliste', NULL, NULL, 1),
-(5, 'Photo/Galatee.JPG', 'Podologue', NULL, NULL, 1),
-(4, 'Photo/Milo.JPG', 'Généraliste', NULL, NULL, 1),
-(2, 'Photo/Gab.jpg', 'Généraliste', NULL, NULL, 1);
+                                                                                                           (3, '', 'Cardiologue', NULL, NULL, 1),
+                                                                                                           (6, '', 'Généraliste', NULL, 'CV/cv_lilia_belazi.xml', 1),
+                                                                                                           (5, '', 'Podologue', NULL, NULL, 1),
+                                                                                                           (4, '', 'Généraliste', NULL, NULL, 1),
+                                                                                                           (2, '', 'Généraliste', NULL, NULL, 1);
+COMMIT;
+
+
+
 
 -- --------------------------------------------------------
 

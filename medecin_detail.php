@@ -128,7 +128,7 @@ $conn->close();
 
                 if (!empty($path_photo)) {
                     $path_photo = htmlspecialchars($path_photo);
-                    echo '<img src="' . $path_photo . '" alt="Photo de ' . htmlspecialchars($nom) . '" class="img-thumbnail" width="100" height="100">';
+                    echo '<img src="' . $path_photo . '" alt="images de ' . htmlspecialchars($nom) . '" class="img-thumbnail" width="100" height="100">';
                 } else {
                     echo '<p>Pas de photo disponible</p>';
                 }
@@ -143,6 +143,11 @@ $conn->close();
                         <button class="btn btn-primary btn-custom btn-disabled">Envoyer un message</button>
                     <?php endif; ?>
                     <a href="tel:<?php echo htmlspecialchars($professionnel['path_video'] ?? ''); ?>" class="btn btn-success ms-2">Appeler</a>
+                    <?php if (!empty($professionnel['path_cv'])): ?>
+                        <a href="voir_cv.php?id=<?php echo $id; ?>" class="btn btn-secondary ms-2">Voir le CV</a>
+                    <?php else: ?>
+                        <button class="btn btn-secondary ms-2" disabled>Voir le CV</button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

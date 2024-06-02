@@ -1,0 +1,23 @@
+<cv>
+    <nom>Belazi</nom>
+    <prenom>Lilia</prenom>
+    <email>Example2@gmail.com</email>
+    <specialite>Généraliste</specialite>
+    <experience>
+        <job>
+            <title>Médecin Généraliste</title>
+            <employeur>Hôpital Central</employeur>
+            <duree>5 ans</duree>
+        </job>
+        <job>
+            <title>Internat</title>
+            <employeur>Clinique Universitaire</employeur>
+            <duree>2 ans</duree>
+        </job>
+    </experience>
+    <hobbies>
+        <hobby>Lecture</hobby>
+        <hobby>Voyage</hobby>
+        <hobby>Photographie</hobby>
+    </hobbies>
+</cv>
