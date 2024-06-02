@@ -61,7 +61,7 @@ session_start();
                     $img = $row['path_photo'];
                     echo "<td><img src='$img' width='100' height='100' alt='...'></td>";
                     echo "<td><video width='320' height='180' controls><source src='videos/" . $row['path_video'] . "' type='video/mp4'></video></td>";
-                    echo "<td><a href='chat.php?receiver_id=" . $row['id'] . "'>Contacter</a> | <a href='modifier_medecin.php?id=" . $row['id'] . "'>Modifier</a> | <a href='supprimer_medecin.php?id=" . $row['id'] . "'>Supprimer</a></td>";
+                    echo "<td><a href='chat.php?receiver_id=" . $row['id'] . "'>Contacter</a> | <a href='modifier_medecin.php?id=" . $row['id'] . "'>Modifier</a> | <a href='supprimer_medecin.php?id=" . $row['id'] . "'>Supprimer</a> | <a href='calendrier_admin.php?id=" .$row['id']."'>Calendrier</a> </td>";
                     echo "</tr>";
                 }
             } else {

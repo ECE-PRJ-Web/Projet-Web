@@ -123,7 +123,7 @@ $_SESSION['id'] = session_id();
                 <span style="color: red;">Medi</span><span style="color: white;">care</span>
             </h1>
 
-            <h1 class = "mb-1"> Services Médicaux</h1>
+          <h1 class = "mb-1"> Services Médicaux</h1>
             <img src="medi_logo.png" alt="Logo de l'entreprise" class="logo">
         </div>
 
