@@ -90,7 +90,7 @@ $conn->close();
         }
         .special-text {
             font-weight: bold;
-            color: #333; /* Darker color for the text */
+            color: #333;
         }
         .btn-disabled {
             background-color: grey;
